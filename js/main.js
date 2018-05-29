@@ -53,13 +53,13 @@
   const onArrowKeysPress = (evt) => {
     switch (evt.keyCode) {
       case RIGHT_ARROW_KEY:
-      selectScreen(currentScreen + 1);
-      console.log('right_key')
-      break;
+        selectScreen(currentScreen + 1);
+        // console.log('right_key')
+        break;
       case LEFT_ARROW_KEY:
-      selectScreen(currentScreen - 1);
-      console.log('left_key')
-      break;
+        selectScreen(currentScreen - 1);
+        // console.log('left_key')
+        break;
     }
   };
 
@@ -67,13 +67,13 @@
   const onArrowBtnsClick = (evt) => {
     switch (true) {
       case evt.target.classList.contains(`arrows__btn--right`):
-      selectScreen(currentScreen + 1);
-      console.log('right_btn')
-      break;
+        selectScreen(currentScreen + 1);
+        // console.log('right_btn')
+        break;
       case evt.target.classList.contains(`arrows__btn--left`):
-      selectScreen(currentScreen - 1);
-      console.log('left_btn')
-      break;
+        selectScreen(currentScreen - 1);
+        // console.log('left_btn')
+        break;
     }
   };
 
@@ -82,7 +82,7 @@
     const arrowBtns = document.querySelectorAll(`.arrows__btn`);
     arrowBtns.forEach((btn) => {
       btn.addEventListener(`click`, onArrowBtnsClick);
-    })
+    });
 
     document.addEventListener(`keydown`, onArrowKeysPress);
   };
@@ -91,7 +91,7 @@
   const startButton = document.querySelector(`.intro__asterisk`);
   const onStartButtonClick = () => {
     selectScreen(currentScreen);
-    renderArrows ();
+    renderArrows();
     addArrowsListeners();
   };
 
