@@ -46,7 +46,7 @@
     </div>
     `;
 
-    document.body.innerHTML = document.body.innerHTML + arrowsHTMLCode;
+    document.body.insertAdjacentHTML(`beforeend`, arrowsHTMLCode);
   };
 
   // handler на нажатие клавиш
@@ -54,11 +54,9 @@
     switch (evt.keyCode) {
       case RIGHT_ARROW_KEY:
         selectScreen(currentScreen + 1);
-        // console.log('right_key')
         break;
       case LEFT_ARROW_KEY:
         selectScreen(currentScreen - 1);
-        // console.log('left_key')
         break;
     }
   };
@@ -68,11 +66,9 @@
     switch (true) {
       case evt.target.classList.contains(`arrows__btn--right`):
         selectScreen(currentScreen + 1);
-        // console.log('right_btn')
         break;
       case evt.target.classList.contains(`arrows__btn--left`):
         selectScreen(currentScreen - 1);
-        // console.log('left_btn')
         break;
     }
   };
