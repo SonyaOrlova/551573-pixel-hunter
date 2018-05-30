@@ -8,20 +8,29 @@
   const mainPage = document.querySelector(`.central`);
   const screens = Array.from(document.querySelectorAll(`template`)).map((it) => it.content);
 
-  // отрисовка экрана
+    // выбор экрана и его отрисовка
+
   const renderScreen = (screen) => {
     mainPage.innerHTML = ``;
     mainPage.appendChild(screen.cloneNode(true));
   };
 
-  // выбор экрана
   let currentScreen = 0;
+
   const selectScreen = (index) => {
     index = index < 0 ? screens.length - 1 : index;
     index = index >= screens.length ? 0 : index;
     currentScreen = index;
 
     renderScreen(screens[currentScreen]);
+  };
+
+  const selectNextScreen = () => {
+    selectScreen(currentScreen + 1);
+  };
+
+  const selectPrevScreen = () => {
+    selectScreen(currentScreen - 1);
   };
 
   // отрисовка стрелок
@@ -53,11 +62,11 @@
   const onArrowKeysPress = (evt) => {
     switch (evt.keyCode) {
       case RIGHT_ARROW_KEY:
-        selectScreen(currentScreen + 1);
-        break;
+      selectNextScreen();
+      break;
       case LEFT_ARROW_KEY:
-        selectScreen(currentScreen - 1);
-        break;
+      selectPrevScreen();
+      break;
     }
   };
 
@@ -65,11 +74,11 @@
   const onArrowBtnsClick = (evt) => {
     switch (true) {
       case evt.target.classList.contains(`arrows__btn--right`):
-        selectScreen(currentScreen + 1);
-        break;
+      selectNextScreen();
+      break;
       case evt.target.classList.contains(`arrows__btn--left`):
-        selectScreen(currentScreen - 1);
-        break;
+      selectPrevScreen();
+      break;
     }
   };
 
