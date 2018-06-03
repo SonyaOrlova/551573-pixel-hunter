@@ -5,29 +5,31 @@ export const initScreens = (importScreens) => {
 };
 
 export const createElementFromTemplate = (template) => {
-  const wrapper = document.createElement(`div`);
-  wrapper.innerHTML = template.trim();
-  return wrapper;
+  // const wrapper = document.createElement(`div`);
+  // wrapper.innerHTML = template.trim();
+  // return wrapper;
 
   // // вариант 1 - не работает с экрана game2
   // return document.createRange().createContextualFragment(template);
 
-  // // вариант 2 - аналогично
-  // const fragment = document.createDocumentFragment();
-  // const container = document.createElement('div');
+  const fragment = document.createDocumentFragment();
+  const container = document.createElement('div');
 
-  // container.innerHTML = template.trim();
+  container.innerHTML = template.trim();
 
-  // while (container.childNodes.length > 0) {
-  //   fragment.appendChild(container.childNodes[0]);
-  // }
-  // return fragment;
+  while (container.childNodes.length > 0) {
+    fragment.appendChild(container.childNodes[0]);
+  }
+  return fragment;
 };
 
 const mainPage = document.querySelector(`.central`);
 export const renderScreen = (screenName) => {
   mainPage.innerHTML = ``;
-  mainPage.appendChild(screens[screenName]);
+  // if(!screens[screenName]){
+  //   throw new Error(`error`);
+  // }
+  mainPage.appendChild(screens[screenName].cloneNode(true));
 };
 
 export const checkRadio = (currentScreen, radioGroupName) => {
