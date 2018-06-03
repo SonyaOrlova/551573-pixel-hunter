@@ -13,7 +13,7 @@ export const createElementFromTemplate = (template) => {
   // return document.createRange().createContextualFragment(template);
 
   const fragment = document.createDocumentFragment();
-  const container = document.createElement('div');
+  const container = document.createElement(`div`);
 
   container.innerHTML = template.trim();
 
