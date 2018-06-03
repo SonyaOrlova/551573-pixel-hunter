@@ -1,8 +1,6 @@
 // Экран правил игры, блок #rules.
 
 import {createElementFromTemplate, renderScreen, backToScreen} from './util.js';
-import game1Screen from './game-1.js';
-import greetingScreen from './greeting.js';
 
 const rulesTemplate = `
  <header class="header">
@@ -42,20 +40,27 @@ const rulesTemplate = `
 
 const rulesScreen = createElementFromTemplate(rulesTemplate);
 
+const form = rulesScreen.querySelector(`.rules__form`);
 const formInput = rulesScreen.querySelector(`.rules__input`);
 const formSubmitBtn = rulesScreen.querySelector(`.rules__button`);
 
 const onFormInputChange = () => {
-  formInput.value !== `` ? formSubmitBtn.disabled = false : formSubmitBtn.disabled = true;
+  if (formInput.value !== ``) {
+    formSubmitBtn.disabled = false;
+  } else {
+    formSubmitBtn.disabled = true;
+  }
 };
 
-const onFormSubmitBtnClick = () => {
-  renderScreen(game1Screen);
+const onFormSubmit = () => {
+  renderScreen(`game1`);
+  form.reset();
+  formSubmitBtn.disabled = true;
 };
 
 formInput.addEventListener(`keyup`, onFormInputChange);
-formSubmitBtn.addEventListener(`click`, onFormSubmitBtnClick);
+form.addEventListener(`submit`, onFormSubmit);
 
-backToScreen(rulesScreen, greetingScreen);
+backToScreen(rulesScreen, `greeting`);
 
 export default rulesScreen;

@@ -1,7 +1,6 @@
 // Экран приветствия, блок #greeting.
 
 import {createElementFromTemplate, renderScreen} from './util.js';
-import rulesScreen from './rules.js';
 
 const greetingTemplate = `
   <div class="greeting central--blur">
@@ -31,9 +30,7 @@ const greetingTemplate = `
 const greetingScreen = createElementFromTemplate(greetingTemplate);
 
 const greetingContinueBtn = greetingScreen.querySelector(`.greeting__continue`);
-const onGreetingContinueBtnClick = () => {
-  renderScreen(rulesScreen);
-};
+const onGreetingContinueBtnClick = () => renderScreen(`rules`);
 
 greetingContinueBtn.addEventListener(`click`, onGreetingContinueBtnClick);
 

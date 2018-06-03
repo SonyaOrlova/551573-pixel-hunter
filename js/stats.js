@@ -1,7 +1,6 @@
 // Экран с результатами, блок #stats.
 
 import {createElementFromTemplate, backToScreen} from './util.js';
-import greetingScreen from './greeting.js';
 
 const statsTemplate = `
    <header class="header">
@@ -125,6 +124,6 @@ const statsTemplate = `
 
 const statsScreen = createElementFromTemplate(statsTemplate);
 
-backToScreen(statsScreen, greetingScreen);
+backToScreen(statsScreen, `greeting`);
 
 export default statsScreen;

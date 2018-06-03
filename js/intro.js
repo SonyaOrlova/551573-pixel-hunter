@@ -1,7 +1,6 @@
 // Главный экран, на основе блока #intro
 
 import {createElementFromTemplate, renderScreen} from './util.js';
-import greetingScreen from './greeting.js';
 
 const introTemplate = `
   <div id="main" class="central__content">
@@ -24,9 +23,7 @@ const introTemplate = `
 const introScreen = createElementFromTemplate(introTemplate);
 
 const startButton = introScreen.querySelector(`.intro__asterisk`);
-const onStartButtonClick = () => {
-  renderScreen(greetingScreen);
-};
+const onStartButtonClick = () => renderScreen(`greeting`);
 
 startButton.addEventListener(`click`, onStartButtonClick);
 

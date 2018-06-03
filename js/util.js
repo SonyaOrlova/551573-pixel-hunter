@@ -1,24 +1,35 @@
 
-// создает элемент на базе строки-шаблона
-export const createElementFromTemplate = (template) => {
-  // const elementFragment = document.createDocumentFragment();
-  // elementFragment.insertAdjacentHTML(`beforeEnd`, template);
-  // return elementFragment;
+let screens;
+export const initScreens = (importScreens) => {
+  screens = importScreens;
+};
 
+export const createElementFromTemplate = (template) => {
   const wrapper = document.createElement(`div`);
   wrapper.innerHTML = template.trim();
   return wrapper;
+
+  // // вариант 1 - не работает с экрана game2
+  // return document.createRange().createContextualFragment(template);
+
+  // // вариант 2 - аналогично
+  // const fragment = document.createDocumentFragment();
+  // const container = document.createElement('div');
+
+  // container.innerHTML = template.trim();
+
+  // while (container.childNodes.length > 0) {
+  //   fragment.appendChild(container.childNodes[0]);
+  // }
+  // return fragment;
 };
 
-// отрисовывает экран на странице
 const mainPage = document.querySelector(`.central`);
-
-export const renderScreen = (screen) => {
+export const renderScreen = (screenName) => {
   mainPage.innerHTML = ``;
-  mainPage.appendChild(screen);
+  mainPage.appendChild(screens[screenName]);
 };
 
-// проверяет выбор radio кнопки с указанием группыs
 export const checkRadio = (currentScreen, radioGroupName) => {
   let isRadioChecked = false;
   const groupRadios = currentScreen.querySelectorAll(`input[name=${radioGroupName}]`);
@@ -30,15 +41,7 @@ export const checkRadio = (currentScreen, radioGroupName) => {
   return isRadioChecked;
 };
 
-export const uncheckRadios = (allRadios) => {
-  allRadios.forEach((radio) => {
-    radio.checked = false;
-  });
-};
-
-export const backToScreen = (currentScreen, screenBackTo) => {
+export const backToScreen = (currentScreen, screenBackToName) => {
   const backBtn = currentScreen.querySelector(`.back`);
-  backBtn.addEventListener(`click`, () => {
-    renderScreen(screenBackTo);
-  });
+  backBtn.addEventListener(`click`, () => renderScreen(screenBackToName));
 };

@@ -1,8 +1,6 @@
 // Экран первой игры, блок #game-1.
 
-import {createElementFromTemplate, renderScreen, checkRadio, uncheckRadios, backToScreen} from './util.js';
-import game2Screen from './game-2.js';
-import greetingScreen from './greeting.js';
+import {createElementFromTemplate, renderScreen, checkRadio, backToScreen} from './util.js';
 
 const game1Template = `
  <header class="header">
@@ -72,19 +70,19 @@ const game1Template = `
   </footer>`;
 
 const game1Screen = createElementFromTemplate(game1Template);
+
+const form = game1Screen.querySelector(`.game__content`);
 const allRadios = game1Screen.querySelectorAll(`input[type="radio"]`);
 
 const onRadioChange = () => {
   if (checkRadio(game1Screen, `question1`) && checkRadio(game1Screen, `question2`)) {
-    renderScreen(game2Screen);
-    uncheckRadios(allRadios);
+    renderScreen(`game2`);
+    form.reset();
   }
 };
 
-allRadios.forEach((radio) => {
-  radio.addEventListener(`change`, onRadioChange);
-});
+allRadios.forEach((radio) => radio.addEventListener(`change`, onRadioChange));
 
-backToScreen(game1Screen, greetingScreen);
+backToScreen(game1Screen, `greeting`);
 
 export default game1Screen;

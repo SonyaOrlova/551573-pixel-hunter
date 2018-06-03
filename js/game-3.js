@@ -1,8 +1,6 @@
 // Экран третьей игры, блок #game-3.
 
 import {createElementFromTemplate, renderScreen, backToScreen} from './util.js';
-import statsScreen from './stats.js';
-import greetingScreen from './greeting.js';
 
 const game3Template = `
   <header class="header">
@@ -63,24 +61,17 @@ const game3Screen = createElementFromTemplate(game3Template);
 const gameImages = game3Screen.querySelectorAll(`.game__option`);
 
 const onImageClick = (evt) => {
-  gameImages.forEach((image) => {
-    image.classList.remove(`game__option--selected`);
-  });
+  gameImages.forEach((image) => image.classList.remove(`game__option--selected`));
 
-  const target = evt.target;
-
-  if (!target.classList.contains(`game__option--selected`)) {
-    target.classList.add(`game__option--selected`);
+  if (!evt.target.classList.contains(`game__option--selected`)) {
+    evt.target.classList.add(`game__option--selected`);
   }
 
-  renderScreen(statsScreen);
+  renderScreen(`stats`);
 };
 
-gameImages.forEach((image) => {
-  image.addEventListener(`click`, onImageClick);
-});
+gameImages.forEach((image) => image.addEventListener(`click`, onImageClick));
 
-
-backToScreen(game3Screen, greetingScreen);
+backToScreen(game3Screen, `greeting`);
 
 export default game3Screen;
