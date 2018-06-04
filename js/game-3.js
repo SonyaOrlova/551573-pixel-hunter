@@ -70,7 +70,10 @@ const game3Screen = () => {
     renderScreen(`stats`);
   };
 
-  gameImages.forEach((image) => image.addEventListener(`click`, onImageClick));
+  gameImages.forEach((image) => {
+    image.querySelector(`img`).style.pointerEvents = `none`; // для ff
+    image.addEventListener(`click`, onImageClick);
+  });
 
   backToScreen(game3Element, `greeting`);
 
