@@ -69,20 +69,27 @@ const game1Template = `
     </div>
   </footer>`;
 
-const game1Screen = createElementFromTemplate(game1Template);
+const game1Screen = () => {
+  const game1Element = createElementFromTemplate(game1Template);
 
-const form = game1Screen.querySelector(`.game__content`);
-const allRadios = game1Screen.querySelectorAll(`input[type="radio"]`);
+  const form = game1Element.querySelector(`.game__content`);
 
-const onRadioChange = () => {
-  if (checkRadio(game1Screen, `question1`) && checkRadio(game1Screen, `question2`)) {
-    renderScreen(`game2`);
-    form.reset();
-  }
+  const allRadios = game1Element.querySelectorAll(`input[type="radio"]`);
+  const radiosQ1 = game1Element.querySelectorAll(`input[name="question1"]`);
+  const radiosQ2 = game1Element.querySelectorAll(`input[name="question2"]`);
+
+  const onRadioChange = () => {
+    if (checkRadio(radiosQ1) && checkRadio(radiosQ2)) {
+      renderScreen(`game2`);
+      form.reset();
+    }
+  };
+
+  allRadios.forEach((radio) => radio.addEventListener(`change`, onRadioChange));
+
+  backToScreen(game1Element, `greeting`);
+
+  return game1Element;
 };
-
-allRadios.forEach((radio) => radio.addEventListener(`change`, onRadioChange));
-
-backToScreen(game1Screen, `greeting`);
 
 export default game1Screen;

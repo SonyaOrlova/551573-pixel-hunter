@@ -38,29 +38,33 @@ const rulesTemplate = `
     </div>
   </footer>`;
 
-const rulesScreen = createElementFromTemplate(rulesTemplate);
+const rulesScreen = () => {
+  const rulesElement = createElementFromTemplate(rulesTemplate);
 
-const form = rulesScreen.querySelector(`.rules__form`);
-const formInput = rulesScreen.querySelector(`.rules__input`);
-const formSubmitBtn = rulesScreen.querySelector(`.rules__button`);
+  const form = rulesElement.querySelector(`.rules__form`);
+  const formInput = rulesElement.querySelector(`.rules__input`);
+  const formSubmitBtn = rulesElement.querySelector(`.rules__button`);
 
-const onFormInputChange = () => {
-  if (formInput.value !== ``) {
-    formSubmitBtn.disabled = false;
-  } else {
+  const onFormInputChange = () => {
+    if (formInput.value !== ``) {
+      formSubmitBtn.disabled = false;
+    } else {
+      formSubmitBtn.disabled = true;
+    }
+  };
+
+  const onFormSubmit = () => {
+    renderScreen(`game1`);
+    form.reset();
     formSubmitBtn.disabled = true;
-  }
+  };
+
+  formInput.addEventListener(`keyup`, onFormInputChange);
+  form.addEventListener(`submit`, onFormSubmit);
+
+  backToScreen(rulesElement, `greeting`);
+
+  return rulesElement;
 };
-
-const onFormSubmit = () => {
-  renderScreen(`game1`);
-  form.reset();
-  formSubmitBtn.disabled = true;
-};
-
-formInput.addEventListener(`keyup`, onFormInputChange);
-form.addEventListener(`submit`, onFormSubmit);
-
-backToScreen(rulesScreen, `greeting`);
 
 export default rulesScreen;

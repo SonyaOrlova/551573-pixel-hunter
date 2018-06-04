@@ -20,11 +20,15 @@ const introTemplate = `
     </div>
   </footer>`;
 
-const introScreen = createElementFromTemplate(introTemplate);
+const introScreen = () => {
+  const introElement = createElementFromTemplate(introTemplate);
 
-const startButton = introScreen.querySelector(`.intro__asterisk`);
-const onStartButtonClick = () => renderScreen(`greeting`);
+  const startButton = introElement.querySelector(`.intro__asterisk`);
+  const onStartButtonClick = () => renderScreen(`greeting`);
 
-startButton.addEventListener(`click`, onStartButtonClick);
+  startButton.addEventListener(`click`, onStartButtonClick);
+
+  return introElement;
+};
 
 export default introScreen;

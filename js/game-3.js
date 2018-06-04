@@ -56,22 +56,25 @@ const game3Template = `
     </div>
   </footer>`;
 
-const game3Screen = createElementFromTemplate(game3Template);
+const game3Screen = () => {
+  const game3Element = createElementFromTemplate(game3Template);
 
-const gameImages = game3Screen.querySelectorAll(`.game__option`);
+  const gameImages = game3Element.querySelectorAll(`.game__option`);
+  const onImageClick = (evt) => {
+    gameImages.forEach((image) => image.classList.remove(`game__option--selected`));
 
-const onImageClick = (evt) => {
-  gameImages.forEach((image) => image.classList.remove(`game__option--selected`));
+    if (!evt.target.classList.contains(`game__option--selected`)) {
+      evt.target.classList.add(`game__option--selected`);
+    }
 
-  if (!evt.target.classList.contains(`game__option--selected`)) {
-    evt.target.classList.add(`game__option--selected`);
-  }
+    renderScreen(`stats`);
+  };
 
-  renderScreen(`stats`);
+  gameImages.forEach((image) => image.addEventListener(`click`, onImageClick));
+
+  backToScreen(game3Element, `greeting`);
+
+  return game3Element;
 };
-
-gameImages.forEach((image) => image.addEventListener(`click`, onImageClick));
-
-backToScreen(game3Screen, `greeting`);
 
 export default game3Screen;

@@ -27,11 +27,15 @@ const greetingTemplate = `
     </div>
   </footer>`;
 
-const greetingScreen = createElementFromTemplate(greetingTemplate);
+const greetingScreen = () => {
+  const greetingElement = createElementFromTemplate(greetingTemplate);
 
-const greetingContinueBtn = greetingScreen.querySelector(`.greeting__continue`);
-const onGreetingContinueBtnClick = () => renderScreen(`rules`);
+  const greetingContinueBtn = greetingElement.querySelector(`.greeting__continue`);
+  const onGreetingContinueBtnClick = () => renderScreen(`rules`);
 
-greetingContinueBtn.addEventListener(`click`, onGreetingContinueBtnClick);
+  greetingContinueBtn.addEventListener(`click`, onGreetingContinueBtnClick);
+
+  return greetingElement;
+};
 
 export default greetingScreen;

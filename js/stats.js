@@ -122,8 +122,12 @@ const statsTemplate = `
     </div>
   </footer>`;
 
-const statsScreen = createElementFromTemplate(statsTemplate);
+const statsScreen = () => {
+  const statsElement = createElementFromTemplate(statsTemplate);
 
-backToScreen(statsScreen, `greeting`);
+  backToScreen(statsElement, `greeting`);
+
+  return statsElement;
+};
 
 export default statsScreen;

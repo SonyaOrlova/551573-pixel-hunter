@@ -1,4 +1,3 @@
-
 import introScreen from './intro.js';
 import greetingScreen from './greeting.js';
 import rulesScreen from './rules.js';
