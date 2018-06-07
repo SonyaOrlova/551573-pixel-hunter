@@ -116,6 +116,6 @@ gulp.task(`test`, function () {
     ]}, `cjs`))            // Выходной формат тестов — `CommonJS` модуль
   .pipe(gulp.dest(`build/test`))
   .pipe(mocha({
-    reporter: `spec`       // Вид в котором я хочу отображать результаты тестирования
+    reporter: `spec`     // Вид в котором я хочу отображать результаты тестирования
   }));
 });
