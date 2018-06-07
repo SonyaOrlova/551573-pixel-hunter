@@ -4,7 +4,7 @@ export const setTimer = (time) => {
   }
 
   const timer = {
-    timeLeft: time, // вот это
+    timeLeft: time,
     isFinished: () => timer.timeLeft > 0 ? false : true,
     tick: () => {
       if (timer.timeLeft > 0) {
