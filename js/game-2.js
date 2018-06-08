@@ -1,6 +1,6 @@
 // Экран второй игры, блок #game-2.
 
-import {createElementFromTemplate, renderScreen, checkRadio, backToScreen} from './util.js';
+import {createElementFromTemplate, renderScreen, backToScreen} from './util.js';
 
 const game2Template = `
   <header class="header">
@@ -62,17 +62,14 @@ const game2Screen = () => {
   const game2Element = createElementFromTemplate(game2Template);
 
   const form = game2Element.querySelector(`.game__content`);
-  const allRadios = game2Element.querySelectorAll(`input[type="radio"]`);
-  const radiosQ1 = game2Element.querySelectorAll(`input[name="question1"]`);
-
   const onRadioChange = () => {
-    if (checkRadio(radiosQ1)) {
+    if (form.question1.value) {
       renderScreen(`game3`);
       form.reset();
     }
   };
 
-  allRadios.forEach((radio) => radio.addEventListener(`change`, onRadioChange));
+  form.addEventListener(`click`, onRadioChange);
 
   backToScreen(game2Element, `greeting`);
 

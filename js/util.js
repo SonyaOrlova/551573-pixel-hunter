@@ -25,16 +25,6 @@ export const renderScreen = (screenName) => {
   mainPage.appendChild(screens[screenName]());
 };
 
-export const checkRadio = (groupRadios) => {
-  let isRadioChecked = false;
-  groupRadios.forEach((radio) => {
-    if (radio.checked) {
-      isRadioChecked = true;
-    }
-  });
-  return isRadioChecked;
-};
-
 export const backToScreen = (currentScreen, screenBackToName) => {
   const backBtn = currentScreen.querySelector(`.back`);
   backBtn.addEventListener(`click`, () => renderScreen(screenBackToName));
