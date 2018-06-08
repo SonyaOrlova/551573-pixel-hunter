@@ -1,5 +1,5 @@
 const SCORING_RULES = {
-  // *add.points per answer
+  // *points per answer
   correctAnswer: 100,
   quickResponse: 50,
   slowResponse: -50,
