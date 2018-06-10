@@ -1,31 +1,28 @@
-let screens;
-export const initScreens = (importScreens) => {
-  screens = importScreens;
+export const createDomElement = (template) => {
+  const wrapper = document.createElement(`div`);
+  wrapper.innerHTML = template.trim();
+  return wrapper.firstChild;
 };
 
-export const createElementFromTemplate = (template) => {
+export const mergeScreenBlocks = (...blocks) => {
   const fragment = document.createDocumentFragment();
-  const container = document.createElement(`div`);
-
-  container.innerHTML = template.trim();
-
-  while (container.childNodes.length > 0) {
-    fragment.appendChild(container.childNodes[0]);
-  }
+  blocks.forEach((block) => {
+    fragment.appendChild(block);
+  });
   return fragment;
 };
 
 const mainPage = document.querySelector(`.central`);
-
-export const renderScreen = (screenName) => {
+export const renderScreen = (screen) => {
   mainPage.innerHTML = ``;
-  // if (!screens[screenName]) {
-  //   throw new Error(`error`);
-  // }
-  mainPage.appendChild(screens[screenName]());
+  mainPage.appendChild(screen);
 };
 
-export const backToScreen = (currentScreen, screenBackToName) => {
-  const backBtn = currentScreen.querySelector(`.back`);
-  backBtn.addEventListener(`click`, () => renderScreen(screenBackToName));
+export const wrapHeaderBlocks = (...blocks) => {
+  const wrapper = document.createElement(`header`);
+  wrapper.classList.add(`header`);
+  blocks.forEach((block) => {
+    wrapper.appendChild(block);
+  });
+  return wrapper;
 };

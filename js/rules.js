@@ -1,16 +1,14 @@
 // Экран правил игры, блок #rules.
 
-import {createElementFromTemplate, renderScreen, backToScreen} from './util.js';
+import {createDomElement, mergeScreenBlocks, renderScreen, wrapHeaderBlocks} from './util.js';
+import {initialGameState} from './game-data.js';
+// блоки для создания текущего экрана
+import backHeader from './header-back.js';
+import footer from './footer.js';
+// следующий экран
+import {game} from './game.js';
 
 const rulesTemplate = `
- <header class="header">
-    <div class="header__back">
-      <button class="back">
-        <img src="img/arrow_left.svg" width="45" height="45" alt="Back">
-        <img src="img/logo_small.svg" width="101" height="44">
-      </button>
-    </div>
-  </header>
   <div class="rules">
     <h1 class="rules__title">Правила</h1>
     <p class="rules__description">Угадай 10 раз для каждого изображения фото <img
@@ -27,23 +25,20 @@ const rulesTemplate = `
       <button class="rules__button  continue" type="submit" disabled>Go!</button>
     </form>
   </div>
-  <footer class="footer">
-    <a href="https://htmlacademy.ru" class="social-link social-link--academy">HTML Academy</a>
-    <span class="footer__made-in">Сделано в <a href="https://htmlacademy.ru" class="footer__link">HTML Academy</a> &copy; 2016</span>
-    <div class="footer__social-links">
-      <a href="https://twitter.com/htmlacademy_ru" class="social-link  social-link--tw">Твиттер</a>
-      <a href="https://www.instagram.com/htmlacademy/" class="social-link  social-link--ins">Инстаграм</a>
-      <a href="https://www.facebook.com/htmlacademy" class="social-link  social-link--fb">Фэйсбук</a>
-      <a href="https://vk.com/htmlacademy" class="social-link  social-link--vk">Вконтакте</a>
-    </div>
-  </footer>`;
+`;
 
-const rulesScreen = () => {
-  const rulesElement = createElementFromTemplate(rulesTemplate);
+const rules = () => {
+  const rulesElement = createDomElement(rulesTemplate);
 
-  const form = rulesElement.querySelector(`.rules__form`);
-  const formInput = rulesElement.querySelector(`.rules__input`);
-  const formSubmitBtn = rulesElement.querySelector(`.rules__button`);
+  const rulesScreen = mergeScreenBlocks(
+      wrapHeaderBlocks(backHeader()),
+      rulesElement,
+      footer()
+  );
+
+  const form = rulesScreen.querySelector(`.rules__form`);
+  const formInput = rulesScreen.querySelector(`.rules__input`);
+  const formSubmitBtn = rulesScreen.querySelector(`.rules__button`);
 
   const onFormInputChange = () => {
     if (formInput.value !== ``) {
@@ -54,7 +49,7 @@ const rulesScreen = () => {
   };
 
   const onFormSubmit = () => {
-    renderScreen(`game1`);
+    renderScreen(game(initialGameState));
     form.reset();
     formSubmitBtn.disabled = true;
   };
@@ -62,9 +57,7 @@ const rulesScreen = () => {
   formInput.addEventListener(`keyup`, onFormInputChange);
   form.addEventListener(`submit`, onFormSubmit);
 
-  backToScreen(rulesElement, `greeting`);
-
-  return rulesElement;
+  return rulesScreen;
 };
 
-export default rulesScreen;
+export default rules;
