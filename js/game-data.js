@@ -1,4 +1,5 @@
-const NUMBER_OF_GAMES = 10;
+export const NUMBER_OF_GAMES = 10;
+const NUMBER_OF_LIVES = 3;
 
 const pictures = {
   paintings: [
@@ -13,8 +14,9 @@ const pictures = {
   ]
 };
 
+// типы игр
 export const gameTypeData = {
-  oneImageGame: {
+  oneImage: {
     description: `Угадай, фото или рисунок?`,
     images: 1,
     params: [
@@ -26,7 +28,7 @@ export const gameTypeData = {
     ]
   },
 
-  twoImagesGame: {
+  twoImages: {
     description: `Угадайте для каждого изображения фото или рисунок?`,
     images: 2,
     params: [
@@ -44,7 +46,7 @@ export const gameTypeData = {
     ]
   },
 
-  threeImagesGame: {
+  threeImages: {
     description: `Найдите рисунок среди изображений`,
     images: 3,
     params: [
@@ -70,14 +72,14 @@ export const gameTypeData = {
 };
 
 export const initialGameState = {
-  game: `game1`,
+  level: 0,
   time: 0,
-  lives: 3,
+  lives: NUMBER_OF_LIVES,
   points: 0,
   answers: []
 };
 
-// создает карту игр
+// создает карту игр (массив из 10 рандомных типов игр)
 export const getGameOrder = () => {
   const gameTypes = Object.keys(gameTypeData);
 

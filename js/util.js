@@ -4,6 +4,15 @@ export const createDomElement = (template) => {
   return wrapper.firstChild;
 };
 
+export const wrapHeaderBlocks = (...blocks) => {
+  const wrapper = document.createElement(`header`);
+  wrapper.classList.add(`header`);
+  blocks.forEach((block) => {
+    wrapper.appendChild(block);
+  });
+  return wrapper;
+};
+
 export const mergeScreenBlocks = (...blocks) => {
   const fragment = document.createDocumentFragment();
   blocks.forEach((block) => {
@@ -16,13 +25,4 @@ const mainPage = document.querySelector(`.central`);
 export const renderScreen = (screen) => {
   mainPage.innerHTML = ``;
   mainPage.appendChild(screen);
-};
-
-export const wrapHeaderBlocks = (...blocks) => {
-  const wrapper = document.createElement(`header`);
-  wrapper.classList.add(`header`);
-  blocks.forEach((block) => {
-    wrapper.appendChild(block);
-  });
-  return wrapper;
 };

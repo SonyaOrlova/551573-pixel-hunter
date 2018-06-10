@@ -1,13 +1,17 @@
+// Экран с играми, блок #game
+
 import {createDomElement, mergeScreenBlocks, renderScreen, wrapHeaderBlocks} from './util.js';
-import {gameTypeData, initialGameState, getGameOrder} from './game-data.js';
-// import {initialGameState, getGameOrder} from './game-data.js';
+import {NUMBER_OF_GAMES, gameTypeData, initialGameState, getGameOrder} from './game-data.js';
 // блоки для создания текущего экрана
 import backHeader from './header-back.js';
 import timerHeader from './header-timer.js';
 import livesHeader from './header-lives.js';
 import footer from './footer.js';
+// следующий экран
+import stats from './stats.js';
 
-// создает template игровых экранов
+// ********* создает template игровых элементов *********
+
 const getGameTemplate = (gameType) => {
   switch (gameType) {
 
@@ -16,8 +20,8 @@ const getGameTemplate = (gameType) => {
       <div class="game">
         <p class="game__task">${gameType.description}</p>
         <form class="game__content game__content--wide">
-          <div class="game__option">
           ${[...gameType.params].map((param) => `
+          <div class="game__option" data-type="${param.type}" data-number="${param.index}">
             <img src="${param.src}" alt="Option ${param.index}" width="705" height="455">
             <label class="game__answer  game__answer--photo">
               <input name="question${param.index}" type="radio" value="photo">
@@ -26,8 +30,10 @@ const getGameTemplate = (gameType) => {
             <label class="game__answer  game__answer--wide  game__answer--paint">
               <input name="question${param.index}" type="radio" value="paint">
               <span>Рисунок</span>
-            </label>`).join(``)}
+            </label>
           </div>
+            `
+          ).join(``)}
         </form>
       </div>
       `;
@@ -38,7 +44,7 @@ const getGameTemplate = (gameType) => {
         <p class="game__task">${gameType.description}</p>
         <form class="game__content">
           ${[...gameType.params].map((param) => `
-            <div class="game__option">
+            <div class="game__option" data-type="${param.type}" data-number="${param.index}">
               <img src="${param.src}" alt="Option ${param.index}" width="468" height="458">
               <label class="game__answer  game__answer--photo">
                 <input name="question${param.index}" type="radio" value="photo">
@@ -48,7 +54,9 @@ const getGameTemplate = (gameType) => {
                 <input name="question${param.index}" type="radio" value="paint">
                 <span>Рисунок</span>
               </label>
-            </div>`).join(``)}
+            </div>
+            `
+          ).join(``)}
         </form>
       </div>
       `;
@@ -59,93 +67,225 @@ const getGameTemplate = (gameType) => {
         <p class="game__task">${gameType.description}</p>
         <form class="game__content game__content--triple">
         ${[...gameType.params].map((param) => `
-        <div class="game__option">
+        <div class="game__option" data-type="${param.type}">
           <img src="${param.src}" alt="Option 1" width="304" height="455">
-        </div>`).join(``)}
+        </div>        `
+        ).join(``)}
         </form>
       </div>
       `;
   }
 };
 
-// исходные параметры старта игры (первый экран из 10, создание порядка игры)
-let currentGameIndex = 0;
+// ********* исходные параметры старта игры *********
 
+// данные по игре
+let gameState = {
+  level: initialGameState.level,
+  time: initialGameState.time,
+  lives: initialGameState.lives,
+  points: initialGameState.points,
+  answers: initialGameState.answers
+};
+
+// генерит рандомный порядок игр
 const gameOrder = getGameOrder();
 
-// создает игровые блоки по типам
+// переключает экраны
+const changeGameLevel = () => {
+  gameState.level === NUMBER_OF_QUESTIONS || gameState.lives === 0 ?
+  renderScreen(stats()) : renderScreen(game(gameState))};
+;
+
+// константы правил игры
+const NUMBER_OF_QUESTIONS = 10;
+const SLOW_RESPONSE_TIMELIMIT = 20; // *sec
+const QUICK_RESPONSE_TIMELIMIT = 10; // *sec
+
+// фиксирование результатов ответа
+const timeDefault = 15; // временное значение скорости ответа
+const getAnswer = (result, time) => {
+
+  let answer = {
+    isCorrect: result,
+    time: time,
+    isFast: time < QUICK_RESPONSE_TIMELIMIT,
+    isSlow: time > SLOW_RESPONSE_TIMELIMIT,
+  }
+
+  if(!answer.isCorrect) {
+    gameState.lives -= 1;
+  }; // корректируем жизни
+
+  gameState.answers.push(answer); // отправляем данные по ответу
+};
+
+// ********* создает игровые блоки по типам *********
+
+// ..... Игра 1 изображение ......
+
 const oneImageGame = () => {
-  currentGameIndex += 1;
+  // меняет индекс уровня игры на следующий
+  gameState.level += 1;
+
+  // создает dom элемент игры
   const oneImageGameElement = createDomElement(getGameTemplate(gameTypeData.oneImage));
 
+  // фиксирует результат и переходит на следующий уровень
   const form = oneImageGameElement.querySelector(`.game__content`);
+  const option1Value = oneImageGameElement.querySelector(`.game__option`).dataset.type;
+
   const onRadioChange = () => {
     if (form.question1.value) {
-      renderScreen(game(initialGameState));
-      form.reset();
+      getAnswer((option1Value === form.question1.value), timeDefault) // результат
+      form.reset(); // сброс формы
+      changeGameLevel(); // переход на следующий уровень
     }
   };
-
   form.addEventListener(`click`, onRadioChange);
 
   return oneImageGameElement;
 };
 
+// ..... Игра 2 изображения ......
+
 const twoImagesGame = () => {
-  currentGameIndex += 1;
+  // меняет индекс уровня игры на следующий
+  gameState.level += 1;
+
+  // создает dom элемент игры
   const twoImagesGameElement = createDomElement(getGameTemplate(gameTypeData.twoImages));
 
+  // фиксирует результат и переходит на следующий уровень
   const form = twoImagesGameElement.querySelector(`.game__content`);
+  const options = twoImagesGameElement.querySelectorAll(`.game__option`);
+  let option1Value;
+  let option2Value;
+
+  options.forEach((option) => {
+    if (option.dataset.number == 1) {
+      option1Value = option.dataset.type;
+    }
+    if (option.dataset.number == 2) {
+      option2Value = option.dataset.type;
+    }
+  });
+
   const onRadioChange = () => {
     if (form.question1.value && form.question2.value) {
-      renderScreen(game(initialGameState));
-      form.reset();
+      getAnswer(
+        (option1Value === form.question1.value) && (option2Value === form.question2.value),
+        timeDefault
+      ); // результат
+      form.reset(); // сброс формы
+      changeGameLevel(); // переход на следующий уровень
     }
   };
-
   form.addEventListener(`click`, onRadioChange);
 
   return twoImagesGameElement;
 };
 
+// ..... Игра 3 изображения ......
+
 const threeImagesGame = () => {
-  currentGameIndex += 1;
+  // меняет индекс уровня игры на следующий
+  gameState.level += 1;
+
+  // создает dom элемент игры
   const threeImagesGameElement = createDomElement(getGameTemplate(gameTypeData.threeImages));
 
-  const gameImages = threeImagesGameElement.querySelectorAll(`.game__option`);
+  // фиксирует результат и переходит на следующий уровень
+  const options = threeImagesGameElement.querySelectorAll(`.game__option`);
   const onImageClick = (evt) => {
-    gameImages.forEach((image) => image.classList.remove(`game__option--selected`));
+    options.forEach((option) => option.classList.remove(`game__option--selected`));
 
     if (!evt.target.classList.contains(`game__option--selected`)) {
       evt.target.classList.add(`game__option--selected`);
     }
-    renderScreen(game(initialGameState));
+    getAnswer(evt.target.dataset.type === `paint`, timeDefault); // результат
+    changeGameLevel(); // переход на следующий уровень
   };
 
-  gameImages.forEach((image) => {
-    image.querySelector(`img`).style.pointerEvents = `none`; // для firefox
-    image.addEventListener(`click`, onImageClick);
+  options.forEach((option) => {
+    option.querySelector(`img`).style.pointerEvents = `none`; // для firefox
+    option.addEventListener(`click`, onImageClick);
   });
 
   return threeImagesGameElement;
 };
 
+// ********* текущая статистика игры *********
+
+const gameStats = () => {
+
+  const gameStatsTemplate =
+  `
+    <div class="stats">
+      <ul class="stats">
+      </ul>
+    </div>
+  `;
+
+  const gameStatsElement = createDomElement(gameStatsTemplate);
+  const gameStatsWrapper = gameStatsElement.querySelector(`ul`);
+
+  for (let i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+    const gameIndicator = document.createElement(`li`);
+    gameIndicator.className = `stats__result stats__result--unknown`;
+    gameStatsWrapper.appendChild(gameIndicator);
+  } // добавляет индикаторы в элемент
+
+  const gameIndicators = gameStatsElement.querySelectorAll(`li`);
+
+  if (gameState.answers.length > 0) {
+
+    gameState.answers.forEach((answer, i) => {
+
+      gameIndicators[i].classList.remove(`stats__result--unknown`);
+
+      if (!answer.isCorrect) {
+        gameIndicators[i].classList.add(`stats__result--wrong`);
+      }
+      if (answer.isCorrect) {
+        gameIndicators[i].classList.add(`stats__result--correct`);
+      }
+      if (answer.isFast) {
+        gameIndicators[i].classList.add(`stats__result--fast`);
+      }
+      if (answer.isSlow) {
+        gameIndicators[i].classList.add(`stats__result--slow`);
+      }
+    }); // меняет класс у индикатора
+  }
+
+  return gameStatsElement;
+};
+
+// ********* собирает игровый экран *********
+
 export const game = (gameState) => {
-  // const gameMap = ["threeImages", "twoImages", "oneImage", "threeImages", "threeImages", "oneImage", "twoImages", "threeImages", "twoImages", "threeImages"]
+
   const gameTypeMap = {
-    "oneImageGame": oneImageGame,
-    "twoImagesGame": twoImagesGame,
-    "threeImagesGame": threeImagesGame
+    "oneImage": oneImageGame,
+    "twoImages": twoImagesGame,
+    "threeImages": threeImagesGame
   };
 
-  let currentGame = gameTypeMap[gameOrder[currentGameIndex]];
+  let currentGame = gameTypeMap[gameOrder[gameState.level]];
+
+  // console.log(gameState.lives);
+  // console.log(gameState.answers);
+  // console.log(gameStats())
 
   const gameScreen = mergeScreenBlocks(
       wrapHeaderBlocks(
-          backHeader(),
-          timerHeader(gameState),
-          livesHeader(gameState)),
+        backHeader(),
+        timerHeader(gameState),
+        livesHeader(gameState)
+      ),
       currentGame(),
+      gameStats(),
       footer()
   );
 
