@@ -1,5 +1,6 @@
 import {createDomElement, renderScreen} from './util.js';
 import greeting from './greeting.js';
+import modalConfirm from './modal-confirm.js';
 
 const backHeaderTemplate =
   `
@@ -11,12 +12,17 @@ const backHeaderTemplate =
     </div>
   `;
 
-const backHeader = () => {
+const backHeader = (isGame) => {
 
   const backHeaderElement = createDomElement(backHeaderTemplate);
 
   const back = backHeaderElement.querySelector(`.back`);
-  back.addEventListener(`click`, () => renderScreen(greeting()));
+
+  if (isGame) {
+    back.addEventListener(`click`, () => renderScreen(modalConfirm()));
+  } else {
+    back.addEventListener(`click`, () => renderScreen(greeting()));
+  }
 
   return backHeaderElement;
 };

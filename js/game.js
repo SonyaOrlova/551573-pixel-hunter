@@ -1,7 +1,7 @@
 // Экран с играми, блок #game
 
-import {createDomElement, mergeScreenBlocks, renderScreen, wrapHeaderBlocks} from './util.js';
-import {NUMBER_OF_GAMES, gameTypeData, initialGameState, getGameOrder} from './game-data.js';
+import {createDomElement, wrapHeaderBlocks, mergeScreenBlocks, renderScreen} from './util.js';
+import {NUMBER_OF_GAMES, gameTypeData, getGameOrder} from './game-data.js';
 // блоки для создания текущего экрана
 import backHeader from './header-back.js';
 import timerHeader from './header-timer.js';
@@ -32,8 +32,7 @@ const getGameTemplate = (gameType) => {
               <span>Рисунок</span>
             </label>
           </div>
-            `
-          ).join(``)}
+            `).join(``)}
         </form>
       </div>
       `;
@@ -55,8 +54,7 @@ const getGameTemplate = (gameType) => {
                 <span>Рисунок</span>
               </label>
             </div>
-            `
-          ).join(``)}
+            `).join(``)}
         </form>
       </div>
       `;
@@ -69,53 +67,75 @@ const getGameTemplate = (gameType) => {
         ${[...gameType.params].map((param) => `
         <div class="game__option" data-type="${param.type}">
           <img src="${param.src}" alt="Option 1" width="304" height="455">
-        </div>        `
-        ).join(``)}
+        </div>`).join(``)}
         </form>
       </div>
-      `;
+    `;
   }
 };
 
 // ********* исходные параметры старта игры *********
 
 // данные по игре
-let gameState = {
-  level: initialGameState.level,
-  time: initialGameState.time,
-  lives: initialGameState.lives,
-  points: initialGameState.points,
-  answers: initialGameState.answers
+const NUMBER_OF_LIVES = 3;
+
+let gameState; // параметры уровня
+let gameOrder; // рандомный порядок игр
+
+export const startGame = () => {
+
+  gameOrder = getGameOrder();
+
+  gameState = {
+    level: 0,
+    time: 0,
+    lives: NUMBER_OF_LIVES,
+    points: 0,
+    answers: [],
+    isFail: false
+  };
 };
 
-// генерит рандомный порядок игр
-const gameOrder = getGameOrder();
+const getGameResult = () => {
+  if (gameState.lives === 0) {
+    gameState.isFail = true;
+  }
+};
+
+export const finishGame = () => {
+  return gameState;
+};
 
 // переключает экраны
 const changeGameLevel = () => {
-  gameState.level === NUMBER_OF_QUESTIONS || gameState.lives === 0 ?
-  renderScreen(stats()) : renderScreen(game(gameState))};
-;
+  getGameResult();
+
+  if (gameState.isFail || (gameState.level === NUMBER_OF_GAMES)) {
+    renderScreen(stats());
+  } else {
+    renderScreen(game(gameState));
+  }
+};
+
 
 // константы правил игры
-const NUMBER_OF_QUESTIONS = 10;
 const SLOW_RESPONSE_TIMELIMIT = 20; // *sec
 const QUICK_RESPONSE_TIMELIMIT = 10; // *sec
 
 // фиксирование результатов ответа
 const timeDefault = 15; // временное значение скорости ответа
-const getAnswer = (result, time) => {
 
+const getAnswer = (result, time) => {
   let answer = {
     isCorrect: result,
-    time: time,
+    time,
     isFast: time < QUICK_RESPONSE_TIMELIMIT,
-    isSlow: time > SLOW_RESPONSE_TIMELIMIT,
-  }
+    isSlow: time > SLOW_RESPONSE_TIMELIMIT
+  };
 
-  if(!answer.isCorrect) {
+  if (!answer.isCorrect) {
     gameState.lives -= 1;
-  }; // корректируем жизни
+  } // корректируем жизни
 
   gameState.answers.push(answer); // отправляем данные по ответу
 };
@@ -137,7 +157,7 @@ const oneImageGame = () => {
 
   const onRadioChange = () => {
     if (form.question1.value) {
-      getAnswer((option1Value === form.question1.value), timeDefault) // результат
+      getAnswer((option1Value === form.question1.value), timeDefault); // результат
       form.reset(); // сброс формы
       changeGameLevel(); // переход на следующий уровень
     }
@@ -163,10 +183,10 @@ const twoImagesGame = () => {
   let option2Value;
 
   options.forEach((option) => {
-    if (option.dataset.number == 1) {
+    if (option.dataset.number === `1`) {
       option1Value = option.dataset.type;
     }
-    if (option.dataset.number == 2) {
+    if (option.dataset.number === `2`) {
       option2Value = option.dataset.type;
     }
   });
@@ -174,8 +194,8 @@ const twoImagesGame = () => {
   const onRadioChange = () => {
     if (form.question1.value && form.question2.value) {
       getAnswer(
-        (option1Value === form.question1.value) && (option2Value === form.question2.value),
-        timeDefault
+          (option1Value === form.question1.value) && (option2Value === form.question2.value),
+          timeDefault
       ); // результат
       form.reset(); // сброс формы
       changeGameLevel(); // переход на следующий уровень
@@ -217,7 +237,7 @@ const threeImagesGame = () => {
 
 // ********* текущая статистика игры *********
 
-const gameStats = () => {
+export const gameStats = () => {
 
   const gameStatsTemplate =
   `
@@ -230,7 +250,7 @@ const gameStats = () => {
   const gameStatsElement = createDomElement(gameStatsTemplate);
   const gameStatsWrapper = gameStatsElement.querySelector(`ul`);
 
-  for (let i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+  for (let i = 0; i < NUMBER_OF_GAMES; i++) {
     const gameIndicator = document.createElement(`li`);
     gameIndicator.className = `stats__result stats__result--unknown`;
     gameStatsWrapper.appendChild(gameIndicator);
@@ -264,7 +284,8 @@ const gameStats = () => {
 
 // ********* собирает игровый экран *********
 
-export const game = (gameState) => {
+export const game = (gameStatus = gameState) => {
+  const isGame = true;
 
   const gameTypeMap = {
     "oneImage": oneImageGame,
@@ -272,17 +293,19 @@ export const game = (gameState) => {
     "threeImages": threeImagesGame
   };
 
-  let currentGame = gameTypeMap[gameOrder[gameState.level]];
+  let currentGame = gameTypeMap[gameOrder[gameStatus.level]];
 
+  // console.log(gameOrder);
+  // console.log(gameState);
   // console.log(gameState.lives);
   // console.log(gameState.answers);
   // console.log(gameStats())
 
   const gameScreen = mergeScreenBlocks(
       wrapHeaderBlocks(
-        backHeader(),
-        timerHeader(gameState),
-        livesHeader(gameState)
+          backHeader(isGame),
+          timerHeader(gameStatus),
+          livesHeader(gameStatus)
       ),
       currentGame(),
       gameStats(),

@@ -1,12 +1,11 @@
 // Экран правил игры, блок #rules.
 
-import {createDomElement, mergeScreenBlocks, renderScreen, wrapHeaderBlocks} from './util.js';
-import {initialGameState} from './game-data.js';
+import {createDomElement, wrapHeaderBlocks, mergeScreenBlocks, renderScreen} from './util.js';
 // блоки для создания текущего экрана
 import backHeader from './header-back.js';
 import footer from './footer.js';
 // следующий экран
-import {game} from './game.js';
+import {startGame, game} from './game.js';
 
 const rulesTemplate = `
   <div class="rules">
@@ -49,7 +48,8 @@ const rules = () => {
   };
 
   const onFormSubmit = () => {
-    renderScreen(game(initialGameState));
+    startGame(); // обнуляет параметры игры
+    renderScreen(game()); // загружает игру
     form.reset();
     formSubmitBtn.disabled = true;
   };

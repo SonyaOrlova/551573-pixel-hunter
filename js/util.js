@@ -26,3 +26,9 @@ export const renderScreen = (screen) => {
   mainPage.innerHTML = ``;
   mainPage.appendChild(screen);
 };
+
+// export const renderModalScreen = (screen) => {
+//   mainPage.appendChild(screen);
+//   // screen.classList.add(`modal-confirm__wrap--hidden`);
+// };
+

@@ -1,5 +1,4 @@
 export const NUMBER_OF_GAMES = 10;
-const NUMBER_OF_LIVES = 3;
 
 const pictures = {
   paintings: [
@@ -69,14 +68,6 @@ export const gameTypeData = {
       }
     ]
   }
-};
-
-export const initialGameState = {
-  level: 0,
-  time: 0,
-  lives: NUMBER_OF_LIVES,
-  points: 0,
-  answers: []
 };
 
 // создает карту игр (массив из 10 рандомных типов игр)
