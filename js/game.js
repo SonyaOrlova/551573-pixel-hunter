@@ -71,6 +71,9 @@ const getGameTemplate = (gameType) => {
         </form>
       </div>
     `;
+
+    default:
+      return null;
   }
 };
 
@@ -116,7 +119,6 @@ const changeGameLevel = () => {
     renderScreen(game(gameState));
   }
 };
-
 
 // константы правил игры
 const SLOW_RESPONSE_TIMELIMIT = 20; // *sec
