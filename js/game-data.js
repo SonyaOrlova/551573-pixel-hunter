@@ -14,8 +14,9 @@ const pictures = {
 };
 
 // типы игр
-export const gameTypeData = {
-  oneImage: {
+export const questions = [
+  {
+    category: `oneImage`,
     description: `Угадай, фото или рисунок?`,
     images: 1,
     params: [
@@ -27,7 +28,8 @@ export const gameTypeData = {
     ]
   },
 
-  twoImages: {
+  {
+    category: `twoImages`,
     description: `Угадайте для каждого изображения фото или рисунок?`,
     images: 2,
     params: [
@@ -45,7 +47,8 @@ export const gameTypeData = {
     ]
   },
 
-  threeImages: {
+  {
+    category: `threeImages`,
     description: `Найдите рисунок среди изображений`,
     images: 3,
     params: [
@@ -68,11 +71,11 @@ export const gameTypeData = {
       }
     ]
   }
-};
+];
 
 // создает карту игр (массив из 10 рандомных типов игр)
 export const getGameOrder = () => {
-  const gameTypes = Object.keys(gameTypeData);
+  const gameTypes = questions.map((it) => it.category);
 
   const gameOrder = [];
   for (let i = 0; i < NUMBER_OF_GAMES; i++) {

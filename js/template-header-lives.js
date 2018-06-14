@@ -1,6 +1,4 @@
-import {createDomElement} from './util.js';
-
-const livesHeaderTemplate = (gameState) =>
+const headerLivesTemplate = (gameState) =>
   `
   <div class="game__lives">
       ${new Array(3 - gameState.lives)
@@ -12,11 +10,4 @@ const livesHeaderTemplate = (gameState) =>
   </div>
   `;
 
-const livesHeader = (gameState) => {
-
-  const livesHeaderElement = createDomElement(livesHeaderTemplate(gameState));
-
-  return livesHeaderElement;
-};
-
-export default livesHeader;
+export default headerLivesTemplate;
