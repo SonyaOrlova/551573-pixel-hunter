@@ -201,8 +201,6 @@ export const goGame = (gameStatus = gameState) => {
   // console.log(gameOrder);
   // console.log(gameState);
   // console.log(currentGameScreen);
-  // console.log(gameState.lives);
-  // console.log(gameState.answers);
 
   return currentGameScreen;
 };
