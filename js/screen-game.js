@@ -26,33 +26,25 @@ export const getInintialGameParams = () => {
     time: 0,
     lives: NUMBER_OF_LIVES,
     points: 0,
-    answers: [],
-    isFail: false
+    answers: []
   };
 };
 
-const isGameOver = () => {
-  if (gameState.lives === 0) {
-    gameState.isFail = true;
+// переключает экраны
+const changeGameLevel = () => {
+
+  gameState.level += 1;
+
+  if (gameState.lives === 0 || (gameState.level >= NUMBER_OF_GAMES)) {
+    renderScreen(getFinalStatsScreen());
+  } else {
+    renderScreen(goGame(gameState));
   }
 };
 
 export const fixGameState = () => {
   return gameState;
 }; // для отрисовки экрана итоговой статистики
-
-// переключает экраны
-const changeGameLevel = () => {
-  isGameOver();
-
-  gameState.level += 1;
-
-  if (gameState.isFail || (gameState.level >= NUMBER_OF_GAMES)) {
-    renderScreen(getFinalStatsScreen());
-  } else {
-    renderScreen(goGame(gameState));
-  }
-};
 
 // константы правил игры
 const SLOW_RESPONSE_TIMELIMIT = 20; // *sec

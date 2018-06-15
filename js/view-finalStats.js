@@ -16,7 +16,7 @@ export default class FinalStatsView extends AbstractView {
     <header class="header">
     ${headerLogoTemplate}</header>
   <div class="result">
-    <h1>${this.finalResult.isFail ? `Fail` : `Победа`}</h1>
+    <h1>${this.finalResult.lives > 0 ? `Победа` : `Fail`}</h1>
     <table class="result__table">
       <tr>
         <td class="result__number">1.</td>
