@@ -1,7 +1,7 @@
-export const createDomElement = (template) => {
-  const wrapper = document.createElement(`div`);
-  wrapper.innerHTML = template.trim();
-  return wrapper.firstChild;
+export const createDomElement = (html) => {
+  const template = document.createElement(`template`);
+  template.innerHTML = html;
+  return template.content;
 };
 
 export const wrapHeaderBlocks = (...blocks) => {
