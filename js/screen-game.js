@@ -17,7 +17,7 @@ const NUMBER_OF_LIVES = 3;
 let gameState; // параметры уровня
 let gameOrder; // рандомный порядок игр
 
-export const getInintialGameParams = () => {
+export const resetGame = () => {
 
   gameOrder = getGameOrder();
 
@@ -38,7 +38,7 @@ const changeGameLevel = () => {
   if (gameState.lives === 0 || (gameState.level >= NUMBER_OF_GAMES)) {
     renderScreen(getFinalStatsScreen());
   } else {
-    renderScreen(goGame(gameState));
+    renderScreen(playGame(gameState));
   }
 };
 
@@ -146,7 +146,7 @@ const getThreeImagesQuestionScreen = () => {
 
 // ********* запускает игру *********
 
-export const goGame = (gameStatus = gameState) => {
+export const playGame = (gameStatus = gameState) => {
   const gameTypeMap = {
     "oneImage": getOneImageQuestionScreen(),
     "twoImages": getTwoImagesQuestionScreen(),

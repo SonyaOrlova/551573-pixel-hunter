@@ -21,23 +21,23 @@ export default class ModalConfirmView extends AbstractView {
     `;
   }
 
-  onConfirmBtnOkClick() { }
+  onBtnOkClick() { }
 
   bind() {
     const confirmBtns = this.element.querySelectorAll(`.modal-confirm__btn`);
     // const confirmBtnClose = modalConfirmElement.querySelectorAll(`.modal-confirm__close`);
     // let confirmBtnCancel;
-    let confirmBtnOk;
+    let btnOk;
 
     confirmBtns.forEach((btn) => {
       switch (btn.dataset.select) {
-        case `ok`: confirmBtnOk = btn; break;
+        case `ok`: btnOk = btn; break;
         // case `cancel`: confirmBtnCancel = btn; break;
       }
     });
 
-    confirmBtnOk.addEventListener(`click`, () => {
-      this.onConfirmBtnOkClick();
+    btnOk.addEventListener(`click`, () => {
+      this.onBtnOkClick();
     });
   }
 }

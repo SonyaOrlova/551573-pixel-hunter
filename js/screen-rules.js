@@ -3,7 +3,7 @@ import {renderScreen} from './util.js';
 import RulesView from './view-rules.js';
 import getGreetingScreen from './screen-greeting.js';
 // следующий экран
-import {getInintialGameParams, goGame} from './screen-game.js';
+import {resetGame, playGame} from './screen-game.js';
 
 const getRulesScreen = () => {
   const rules = new RulesView();
@@ -17,8 +17,8 @@ const getRulesScreen = () => {
   };
 
   rules.onFormSubmit = (form, submitBtn) => {
-    getInintialGameParams(); // обнуляет параметры игры
-    renderScreen(goGame()); // загружает игру
+    resetGame(); // обнуляет параметры игры
+    renderScreen(playGame()); // загружает игру
     form.reset();
     submitBtn.disabled = true;
   };

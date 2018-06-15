@@ -8,7 +8,7 @@ const getModalConfirmScreen = () => {
   const modalConfirm = new ModalConfirmView();
   const modalConfirmScreen = modalConfirm.element;
 
-  modalConfirm.onConfirmBtnOkClick = () => renderScreen(getGreetingScreen());
+  modalConfirm.onBtnOkClick = () => renderScreen(getGreetingScreen());
 
   return modalConfirmScreen;
 };
