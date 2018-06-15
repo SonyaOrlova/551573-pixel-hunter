@@ -2,7 +2,7 @@ import {renderScreen} from './util.js';
 // блоки для создания текущего экрана
 import FinalStatsView from './view-finalStats.js';
 import getGreetingScreen from './screen-greeting.js';
-import {fixGameState, fixFlowStats} from './screen-game.js';
+import {fixGameState} from './screen-game.js';
 
 // подсчет очков
 
@@ -68,7 +68,6 @@ const getScore = (answers, lives) => {
 const getFinalStatsScreen = () => {
   const finalStats = new FinalStatsView(
       fixGameState(),
-      fixFlowStats(),
       getScore(fixGameState().answers, fixGameState().lives)
   );
 

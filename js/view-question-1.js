@@ -39,7 +39,7 @@ export default class Question1View extends AbstractView {
           </div>
             `).join(``)}
         </form>
-        ${flowStatsTemplate}
+        ${flowStatsTemplate(this.gameStatus)}
       </div>
     ${footerTemplate}
     `;

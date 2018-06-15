@@ -2,12 +2,12 @@ import AbstractView from './abstract-view.js';
 // templates
 import headerLogoTemplate from './template-header-logo.js';
 import footerTemplate from './template-footer.js';
+import flowStatsTemplate from './template-flowStats.js';
 
 export default class FinalStatsView extends AbstractView {
-  constructor(finalResult, flowStats, score) {
+  constructor(finalResult, score) {
     super();
     this.finalResult = finalResult;
-    this.flowStats = flowStats;
     this.score = score;
   }
 
@@ -21,7 +21,7 @@ export default class FinalStatsView extends AbstractView {
       <tr>
         <td class="result__number">1.</td>
         <td colspan="2" class="result__indicators">
-          ${this.flowStats}
+          ${flowStatsTemplate(this.finalResult)}
         </td>
         <td class="result__points">×&nbsp;100</td>
         <td class="result__total">${this.score.correctAnswers.points}

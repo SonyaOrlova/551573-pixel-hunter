@@ -30,7 +30,7 @@ export default class Question3View extends AbstractView {
           <img src="${param.src}" alt="Option 1" width="304" height="455">
         </div>`).join(``)}
         </form>
-        ${flowStatsTemplate}
+        ${flowStatsTemplate(this.gameStatus)}
       </div>
     ${footerTemplate}
     `;

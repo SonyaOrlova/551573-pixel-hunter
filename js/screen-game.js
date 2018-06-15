@@ -16,7 +16,6 @@ const NUMBER_OF_LIVES = 3;
 
 let gameState; // параметры уровня
 let gameOrder; // рандомный порядок игр
-let finalFlowStats; // слепок разметки статистики с последней игры
 
 export const getInintialGameParams = () => {
 
@@ -42,16 +41,9 @@ export const fixGameState = () => {
   return gameState;
 }; // для отрисовки экрана итоговой статистики
 
-export const fixFlowStats = () => {
-  return finalFlowStats;
-}; // для отрисовки экрана итоговой статистики
-
 // переключает экраны
-const changeGameLevel = (currentGameScreen) => {
+const changeGameLevel = () => {
   isGameOver();
-
-  finalFlowStats = currentGameScreen.querySelector(`.stats`).childNodes[1].outerHTML;
-  // делает слепок разметки текущей статистики для вставки ее в финальную статистику
 
   gameState.level += 1;
 
@@ -59,32 +51,6 @@ const changeGameLevel = (currentGameScreen) => {
     renderScreen(getFinalStatsScreen());
   } else {
     renderScreen(goGame(gameState));
-  }
-};
-
-// обновляет текущую статистику
-const renewFlowStats = (element) => {
-  const gameIndicators = element.querySelectorAll(`.stats__result`);
-
-  if (gameState.answers.length > 0) {
-
-    gameState.answers.forEach((answer, i) => {
-
-      gameIndicators[i].classList.remove(`stats__result--unknown`);
-
-      if (!answer.isCorrect) {
-        gameIndicators[i].classList.add(`stats__result--wrong`);
-      }
-      if (answer.isCorrect) {
-        gameIndicators[i].classList.add(`stats__result--correct`);
-      }
-      if (answer.isFast) {
-        gameIndicators[i].classList.add(`stats__result--fast`);
-      }
-      if (answer.isSlow) {
-        gameIndicators[i].classList.add(`stats__result--slow`);
-      }
-    }); // меняет класс у индикатора
   }
 };
 
@@ -196,7 +162,6 @@ export const goGame = (gameStatus = gameState) => {
   };
 
   const currentGameScreen = gameTypeMap[gameOrder[gameStatus.level]];
-  renewFlowStats(currentGameScreen); // обновляет статистику на экране
 
   // console.log(gameOrder);
   // console.log(gameState);

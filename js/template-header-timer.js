@@ -1,4 +1,4 @@
-const headerTimerTemplate = (state) => `<h1 class="game__timer">${state.time}</h1>`;
+const headerTimerTemplate = (gameStatus) => `<h1 class="game__timer">${gameStatus.time}</h1>`;
 
 export default headerTimerTemplate;
 
