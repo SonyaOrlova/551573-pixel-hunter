@@ -1,13 +1,7 @@
-// export const createDomElement = (html) => {
-//   var template = document.createElement("template");
-//   template.innerHTML = html;
-//   return template.content;
-// };
-
 export const createDomElement = (html) => {
-  const wrapper = document.createElement(`div`);
-  wrapper.innerHTML = html.trim();
-  return wrapper;
+  var template = document.createElement("template");
+  template.innerHTML = html;
+  return template.content;
 };
 
 export const wrapHeaderBlocks = (...blocks) => {
