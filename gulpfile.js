@@ -107,6 +107,9 @@ gulp.task(`build`, [`assemble`], () => {
   gulp.start(`imagemin`);
 });
 
+// gulp.task(`test`, () => {
+// });
+
 gulp.task(`test`, function () {
   return gulp
   .src([`js/**/*.test.js`])
@@ -116,6 +119,6 @@ gulp.task(`test`, function () {
     ]}, `cjs`))            // Выходной формат тестов — `CommonJS` модуль
   .pipe(gulp.dest(`build/test`))
   .pipe(mocha({
-    reporter: `spec`     // Вид в котором я хочу отображать результаты тестирования
+    reporter: `spec`       // Вид в котором я хочу отображать результаты тестирования
   }));
 });
