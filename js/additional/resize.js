@@ -1,11 +1,15 @@
 const resize = (frame, given) => {
 
-  const ratios = [frame.width / given.width, frame.height / given.height];
-  const ratio = Math.min(ratios[0], ratios[1]);
+  const ratio = {
+    byWidth: frame.width / given.width,
+    byHeight: frame.height / given.height
+  };
+
+  const minRatio = Math.min(ratio.byWidth, ratio.byHeight);
 
   let optimized = {
-    width: given.width * ratio,
-    height: given.height * ratio
+    width: given.width * minRatio,
+    height: given.height * minRatio
   };
 
   return optimized;

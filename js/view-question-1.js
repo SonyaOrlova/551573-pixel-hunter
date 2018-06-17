@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {questions} from './game-data';
+import {questions, resize} from './game-data';
 // templates
 import headerLogoTemplate from './template-header-logo.js';
 import headerTimerTemplate from './template-header-timer.js';
@@ -8,6 +8,11 @@ import flowStatsTemplate from './template-flowStats.js';
 import footerTemplate from './template-footer.js';
 
 const questionCategory = questions.find((question) => question.category === `oneImage`);
+
+const IMG_FRAME = {
+  width: 705,
+  height: 455
+};
 
 export default class Question1View extends AbstractView {
   constructor(gameStatus) {
@@ -27,7 +32,7 @@ export default class Question1View extends AbstractView {
         <form class="game__content  game__content--wide">
           ${[...questionCategory.params].map((param) => `
           <div class="game__option" data-type="${param.type}" data-number="${param.index}">
-            <img src="${param.src}" alt="Option ${param.index}" width="705" height="455">
+            <img src="${param.src}" alt="Option ${param.index}">
             <label class="game__answer  game__answer--photo">
               <input name="question${param.index}" type="radio" value="photo">
               <span>Фото</span>
@@ -47,6 +52,18 @@ export default class Question1View extends AbstractView {
 
   onRadioChange() { }
   onLogoClick() { }
+  onLoad(image) {
+
+    const naturalSize = {
+      width: image.naturalWidth,
+      height: image.naturalHeight
+    };
+
+    image.width = resize(IMG_FRAME, naturalSize).width;
+    image.height = resize(IMG_FRAME, naturalSize).height;
+
+    image.style.display = `inline-block`;
+  }
 
   bind() {
     const form = this.element.querySelector(`.game__content`);
@@ -59,6 +76,13 @@ export default class Question1View extends AbstractView {
     const logoBtn = this.element.querySelector(`.back`);
     logoBtn.addEventListener(`click`, () => {
       this.onLogoClick();
+    });
+
+    const images = this.element.querySelectorAll(`.game__option > img`);
+    images.forEach((image) => {
+      image.addEventListener(`load`, () => {
+        this.onLoad(image);
+      });
     });
   }
 }
