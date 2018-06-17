@@ -38,7 +38,7 @@ export default class Question3View extends AbstractView {
 
   onImageClick() { }
   onLogoClick() { }
-  onLoad(image) {
+  onGameImageLoad(image) {
 
     image.parentNode.style.display = `block`;
 
@@ -52,10 +52,10 @@ export default class Question3View extends AbstractView {
       height: image.naturalHeight
     };
 
-    image.width = resize(frameSize, naturalSize).width;
-    image.height = resize(frameSize, naturalSize).height;
+    const optimizedSize = resize(frameSize, naturalSize);
 
-    image.parentNode.style.display = `block`;
+    image.width = optimizedSize.width;
+    image.height = optimizedSize.height;
   }
 
   bind() {
@@ -79,7 +79,7 @@ export default class Question3View extends AbstractView {
     images.forEach((image) => {
       image.parentNode.style.display = `none`;
       image.addEventListener(`load`, () => {
-        this.onLoad(image);
+        this.onGameImageLoad(image);
       });
     });
   }
