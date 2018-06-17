@@ -9,11 +9,6 @@ import footerTemplate from './template-footer.js';
 
 const questionCategory = questions.find((question) => question.category === `oneImage`);
 
-const IMG_FRAME = {
-  width: 705,
-  height: 455
-};
-
 export default class Question1View extends AbstractView {
   constructor(gameStatus) {
     super();
@@ -54,15 +49,20 @@ export default class Question1View extends AbstractView {
   onLogoClick() { }
   onLoad(image) {
 
+    image.parentNode.style.display = `block`;
+
+    const frameSize = {
+      width: image.parentNode.clientWidth,
+      height: image.parentNode.clientHeight
+    };
+
     const naturalSize = {
       width: image.naturalWidth,
       height: image.naturalHeight
     };
 
-    image.width = resize(IMG_FRAME, naturalSize).width;
-    image.height = resize(IMG_FRAME, naturalSize).height;
-
-    image.style.display = `inline-block`;
+    image.width = resize(frameSize, naturalSize).width;
+    image.height = resize(frameSize, naturalSize).height;
   }
 
   bind() {
@@ -80,6 +80,7 @@ export default class Question1View extends AbstractView {
 
     const images = this.element.querySelectorAll(`.game__option > img`);
     images.forEach((image) => {
+      image.parentNode.style.display = `none`;
       image.addEventListener(`load`, () => {
         this.onLoad(image);
       });
