@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {questions} from './game-data';
+import {questions, resize} from './game-data';
 // templates
 import headerLogoTemplate from './template-header-logo.js';
 import headerTimerTemplate from './template-header-timer.js';
@@ -27,7 +27,7 @@ export default class Question3View extends AbstractView {
         <form class="game__content game__content--triple">
         ${[...questionCategory.params].map((param) => `
         <div class="game__option" data-type="${param.type}">
-          <img src="${param.src}" alt="Option 1" width="304" height="455">
+          <img src="${param.src}" alt="Option 1">
         </div>`).join(``)}
         </form>
         ${flowStatsTemplate(this.gameStatus)}
@@ -38,11 +38,31 @@ export default class Question3View extends AbstractView {
 
   onImageClick() { }
   onLogoClick() { }
+  onGameImageLoad(image) {
+
+    image.parentNode.style.display = `block`;
+
+    const frameSize = {
+      width: image.parentNode.clientWidth,
+      height: image.parentNode.clientHeight
+    };
+
+    const naturalSize = {
+      width: image.naturalWidth,
+      height: image.naturalHeight
+    };
+
+    const optimizedSize = resize(frameSize, naturalSize);
+
+    image.width = optimizedSize.width;
+    image.height = optimizedSize.height;
+  }
 
   bind() {
     const options = this.element.querySelectorAll(`.game__option`);
 
     options.forEach((option) => {
+      option.style.display = `none`;
       option.querySelector(`img`).style.pointerEvents = `none`; // для firefox
       option.addEventListener(`click`, (evt) => {
         const target = evt.target;
@@ -53,6 +73,14 @@ export default class Question3View extends AbstractView {
     const logoBtn = this.element.querySelector(`.back`);
     logoBtn.addEventListener(`click`, () => {
       this.onLogoClick();
+    });
+
+    const images = this.element.querySelectorAll(`.game__option > img`);
+    images.forEach((image) => {
+      image.parentNode.style.display = `none`;
+      image.addEventListener(`load`, () => {
+        this.onGameImageLoad(image);
+      });
     });
   }
 }

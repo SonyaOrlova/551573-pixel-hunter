@@ -1,4 +1,4 @@
-import {renderScreen} from './util.js';
+import {renderScreen, addScreen} from './util.js';
 import {NUMBER_OF_GAMES, getGameOrder} from './game-data.js';
 // блоки для создания текущего экрана
 import Question1View from './view-question-1.js';
@@ -86,7 +86,7 @@ const getOneImageQuestionScreen = () => {
       changeGameLevel(oneImageQuestionScreen); // переход на следующий уровень
     }
   };
-  oneImageQuestion.onLogoClick = () => renderScreen(getModalConfirmScreen());
+  oneImageQuestion.onLogoClick = () => addScreen(getModalConfirmScreen());
 
   return oneImageQuestionScreen;
 };
@@ -123,7 +123,7 @@ const getTwoImagesQuestionScreen = () => {
     }
   };
 
-  twoImagesQuestion.onLogoClick = () => renderScreen(getModalConfirmScreen());
+  twoImagesQuestion.onLogoClick = () => addScreen(getModalConfirmScreen());
 
   return twoImagesQuestionScreen;
 };
@@ -139,7 +139,7 @@ const getThreeImagesQuestionScreen = () => {
     changeGameLevel(threeImagesQuestionScreen); // переход на следующий уровень
   };
 
-  threeImagesQuestion.onLogoClick = () => renderScreen(getModalConfirmScreen());
+  threeImagesQuestion.onLogoClick = () => addScreen(getModalConfirmScreen());
 
   return threeImagesQuestionScreen;
 };

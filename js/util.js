@@ -27,8 +27,6 @@ export const renderScreen = (screen) => {
   mainPage.appendChild(screen);
 };
 
-// export const renderModalScreen = (screen) => {
-//   mainPage.appendChild(screen);
-//   // screen.classList.add(`modal-confirm__wrap--hidden`);
-// };
-
+export const addScreen = (screen) => {
+  mainPage.appendChild(screen);
+};

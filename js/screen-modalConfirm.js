@@ -8,7 +8,11 @@ const getModalConfirmScreen = () => {
   const modalConfirm = new ModalConfirmView();
   const modalConfirmScreen = modalConfirm.element;
 
-  modalConfirm.onBtnOkClick = () => renderScreen(getGreetingScreen());
+  modalConfirm.onConfirm = () => renderScreen(getGreetingScreen());
+
+  modalConfirm.onCancel = (modalWrapper) => {
+    modalWrapper.classList.add(`modal-confirm__wrap--hidden`);
+  };
 
   return modalConfirmScreen;
 };
