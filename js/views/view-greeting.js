@@ -1,6 +1,4 @@
-import AbstractView from './abstract-view.js';
-// templates
-import footerTemplate from './template-footer.js';
+import AbstractView from './abstract-view';
 
 export default class GreetingView extends AbstractView {
   constructor() {
@@ -22,7 +20,6 @@ export default class GreetingView extends AbstractView {
         </div>
       <div class="greeting__continue"><span><img src="img/arrow_right.svg" width="64" height="64" alt="Next"></span></div>
     </div>
-    ${footerTemplate}
     `;
   }
 
@@ -30,6 +27,6 @@ export default class GreetingView extends AbstractView {
 
   bind() {
     const continueBtn = this.element.querySelector(`.greeting__continue`);
-    continueBtn.addEventListener(`click`, this.onContinueBtnClick);
+    continueBtn.addEventListener(`click`, () => this.onContinueBtnClick());
   }
 }

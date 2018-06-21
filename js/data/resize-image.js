@@ -1,12 +1,9 @@
-const resize = (frame, given) => {
-
+const resizeImage = (frame, given) => {
   const ratio = {
     byWidth: frame.width / given.width,
     byHeight: frame.height / given.height
   };
-
   const minRatio = Math.min(ratio.byWidth, ratio.byHeight);
-
   let optimized = {
     width: given.width * minRatio,
     height: given.height * minRatio
@@ -15,4 +12,4 @@ const resize = (frame, given) => {
   return optimized;
 };
 
-export default resize;
+export default resizeImage;

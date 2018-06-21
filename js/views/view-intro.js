@@ -1,6 +1,4 @@
-import AbstractView from './abstract-view.js';
-// templates
-import footerTemplate from './template-footer.js';
+import AbstractView from './abstract-view';
 
 export default class IntroView extends AbstractView {
   constructor() {
@@ -15,14 +13,13 @@ export default class IntroView extends AbstractView {
         <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>
       </div>
     </div>
-    ${footerTemplate}
     `;
   }
 
-  onStartButtonClick() { }
+  onStartBtnClick() { }
 
   bind() {
-    const startButton = this.element.querySelector(`.intro__asterisk`);
-    startButton.addEventListener(`click`, this.onStartButtonClick);
+    const startBtn = this.element.querySelector(`.intro__asterisk`);
+    startBtn.addEventListener(`click`, () => this.onStartBtnClick());
   }
 }

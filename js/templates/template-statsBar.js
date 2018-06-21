@@ -1,4 +1,4 @@
-import {NUMBER_OF_GAMES} from './game-data.js';
+import {gameConcept} from '../constants.js';
 
 const renewAnswerIndicator = (answer) => {
   if (answer === undefined) {
@@ -7,29 +7,29 @@ const renewAnswerIndicator = (answer) => {
   if (!answer.isCorrect) {
     return `stats__result--wrong`;
   }
-  if (answer.isCorrect) {
-    return `stats__result--correct`;
-  }
   if (answer.isFast) {
     return `stats__result--fast`;
   }
   if (answer.isSlow) {
     return `stats__result--slow`;
+  }
+  if (answer.isCorrect) {
+    return `stats__result--correct`;
   } else {
     return null;
   }
 };
 
-const flowStatsTemplate = (gameStatus) =>
+const statsBarTemplate = (gameStatus) =>
   `
     <div class="stats">
       <ul class="stats">
-      ${new Array(NUMBER_OF_GAMES).fill().map((it, i) =>`
+      ${new Array(gameConcept.NUMBER_OF_GAMES).fill().map((it, i) =>`
       <li class="stats__result ${renewAnswerIndicator(gameStatus.answers[i])}"></li>
       `).join(``)}
       </ul>
     </div>
   `;
 
-export default flowStatsTemplate;
+export default statsBarTemplate;
 
