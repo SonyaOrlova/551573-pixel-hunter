@@ -1,42 +1,45 @@
-export const NUMBER_OF_GAMES = 10;
+// const pictures = {
+//   paintings: [
+//     `../img/egg_big.png`,
+//     `../img/egg_big.png`,
+//     `../img/egg_big.png`
+//   ],
+//   photos: [
+//     `../img/egg_big.png`,
+//     `../img/egg_big.png`,
+//     `../img/egg_big.png`
+//   ]
+// };
 
 const pictures = {
   paintings: [
-    `https://k42.kn3.net/CF42609C8.jpg`,
-    `https://k42.kn3.net/D2F0370D6.jpg`,
-    `https://k32.kn3.net/5C7060EC5.jpg`
+    // People
+    'https://k42.kn3.net/CF42609C8.jpg',
+
+    // Animals
+    'https://k42.kn3.net/D2F0370D6.jpg',
+
+    // Nature
+    'https://k32.kn3.net/5C7060EC5.jpg'
   ],
   photos: [
-    `http://i.imgur.com/1KegWPz.jpg`,
-    `https://i.imgur.com/DiHM5Zb.jpg`,
-    `http://i.imgur.com/DKR1HtB.jpg`
+    // People
+    'http://i.imgur.com/1KegWPz.jpg',
+
+    // Animals
+    'https://i.imgur.com/DiHM5Zb.jpg',
+
+    // Nature
+    'http://i.imgur.com/DKR1HtB.jpg'
   ]
 };
 
-// resize изоражения
-export const resize = (frame, given) => {
-
-  const ratio = {
-    byWidth: frame.width / given.width,
-    byHeight: frame.height / given.height
-  };
-
-  const minRatio = Math.min(ratio.byWidth, ratio.byHeight);
-
-  let optimized = {
-    width: given.width * minRatio,
-    height: given.height * minRatio
-  };
-
-  return optimized;
-};
-
-// типы игр
 export const questions = [
   {
     category: `oneImage`,
     description: `Угадай, фото или рисунок?`,
     images: 1,
+    answerType: `radio`,
     params: [
       {
         index: 1,
@@ -50,6 +53,7 @@ export const questions = [
     category: `twoImages`,
     description: `Угадайте для каждого изображения фото или рисунок?`,
     images: 2,
+    answerType: `radio`,
     params: [
       {
         index: 1,
@@ -69,6 +73,8 @@ export const questions = [
     category: `threeImages`,
     description: `Найдите рисунок среди изображений`,
     images: 3,
+    answerType: `point`,
+    answerCorrect: `paint`,
     params: [
       {
         index: 1,
@@ -90,14 +96,3 @@ export const questions = [
     ]
   }
 ];
-
-// создает карту игр (массив из 10 рандомных типов игр)
-export const getGameOrder = () => {
-  const gameTypes = questions.map((it) => it.category);
-
-  const gameOrder = [];
-  for (let i = 0; i < NUMBER_OF_GAMES; i++) {
-    gameOrder[i] = gameTypes[Math.floor(Math.random() * (gameTypes.length))];
-  }
-  return gameOrder;
-};

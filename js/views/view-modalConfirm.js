@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './abstract-view';
 
 export default class ModalConfirmView extends AbstractView {
   constructor() {
@@ -26,8 +26,6 @@ export default class ModalConfirmView extends AbstractView {
 
   bind() {
     const confirmBtns = this.element.querySelectorAll(`.modal-confirm__btn`);
-    // const confirmBtnClose = modalConfirmElement.querySelectorAll(`.modal-confirm__close`);
-    // let confirmBtnCancel;
     let btnOk;
     let btnCancel;
     const btnClose = this.element.querySelector(`.modal-confirm__close`);
