@@ -1,4 +1,4 @@
-import {gameConcept} from '../constants.js';
+import {GameConcept} from '../constants.js';
 
 const renewAnswerIndicator = (answer) => {
   if (answer === undefined) {
@@ -24,7 +24,7 @@ const statsBarTemplate = (gameStatus) =>
   `
     <div class="stats">
       <ul class="stats">
-      ${new Array(gameConcept.NUMBER_OF_GAMES).fill().map((it, i) =>`
+      ${new Array(GameConcept.NUMBER_OF_GAMES).fill().map((it, i) =>`
       <li class="stats__result ${renewAnswerIndicator(gameStatus.answers[i])}"></li>
       `).join(``)}
       </ul>

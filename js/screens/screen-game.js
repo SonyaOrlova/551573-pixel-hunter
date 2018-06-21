@@ -1,9 +1,8 @@
-import App from '../application';
-
-import {timeLimits} from '../constants';
+import {TimeLimits} from '../constants';
 
 import HeaderView from '../views/view-header';
-import QuestionView from '../views/view-questions';
+import QuestionViewRadio from '../views/view-question-Radio.js';
+import QuestionViewPoint from '../views/view-question-Point.js';
 import FooterView from '../views/view-footer';
 
 export default class GameScreen {
@@ -22,28 +21,28 @@ export default class GameScreen {
   }
 
   createQuestionView() {
-    const questionType = this.model.renewQuestionType();
-    const questionView = new QuestionView(questionType, this.model._gameState);
+    const question = this.model.renewQuestionType();
+    const questionType = question.type;
 
-    switch (questionType.answerType) {
-      case `radio`:
-        questionView.onAnswer = (answers) => {
-          this.onAnswer(answers.indexOf(false) === -1);
-          this.changeGameLevel();
-        }; break;
+    const questionTypeMap = {
+      'radio': new QuestionViewRadio(question, this.model.gameState),
+      'point': new QuestionViewPoint(question, this.model.gameState)
+    };
 
-      case `point`:
-        questionView.onAnswer = (target) => {
-          this.onAnswer(target.dataset.type === questionType.answerCorrect);
-          this.changeGameLevel();
-        }; break;
-    }
+    const questionView = questionTypeMap[questionType];
+
+    questionView.onAnswer = (result) => {
+      this.onAnswer(result);
+      this.changeGameLevel();
+    };
+
     return questionView;
   }
 
+
   createHeaderView() {
-    const headerView = new HeaderView(this.model._gameState);
-    headerView.onLogoClick = () => App.showModalConfirm();
+    const headerView = new HeaderView(this.model.gameState);
+    headerView.onLogoClick = this.showModalConfirm();
     return headerView;
   }
 
@@ -68,7 +67,7 @@ export default class GameScreen {
   startTimer() {
     this._interval = setInterval(() => {
       this.model.tick();
-      if (this.model._gameState.time <= 0) {
+      if (this.model.gameState.time <= 0) {
         this.onAnswer(false);
         this.changeGameLevel();
       }
@@ -84,7 +83,7 @@ export default class GameScreen {
     this.model.nextLevel();
 
     if (this.model.isDead() || this.model.gameComplete()) {
-      App.showStats(this.model._gameState);
+      this.showNextScreen();
     } else {
       this.updateScreen();
       this.model.restartTimer();
@@ -96,17 +95,17 @@ export default class GameScreen {
 
     const answer = {
       isCorrect: result,
-      time: timeLimits.INITIAL_TIMER - this.model._gameState.time,
+      time: TimeLimits.INITIAL_TIMER - this.model.gameState.time,
       get isFast() {
         if (this.isCorrect) {
-          return this.time < timeLimits.QUICK_RESPONSE_TIMELIMIT;
+          return this.time < TimeLimits.QUICK_RESPONSE_TIMELIMIT;
         } else {
           return undefined;
         }
       },
       get isSlow() {
         if (this.isCorrect) {
-          return this.time > timeLimits.SLOW_RESPONSE_TIMELIMIT;
+          return this.time > TimeLimits.SLOW_RESPONSE_TIMELIMIT;
         } else {
           return undefined;
         }
@@ -117,6 +116,9 @@ export default class GameScreen {
       this.model.die();
     }
 
-    this.model._gameState.answers.push(answer);
+    this.model.gameState.answers.push(answer);
   }
+
+  showNextScreen() { }
+  showModalConfirm() { }
 }

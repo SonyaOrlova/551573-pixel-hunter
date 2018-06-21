@@ -1,5 +1,3 @@
-import App from '../application';
-
 import GreetingView from '../views/view-greeting';
 import FooterView from '../views/view-footer';
 
@@ -13,7 +11,9 @@ export default class GreetingScreen {
     this.root.appendChild(this.footer.element);
   }
 
+  showNextScreen() { }
+
   init() {
-    this.content.onContinueBtnClick = () => App.showRules();
+    this.content.onContinueBtnClick = this.showNextScreen;
   }
 }

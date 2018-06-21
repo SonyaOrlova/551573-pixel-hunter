@@ -1,4 +1,4 @@
-import {gameConcept, timeLimits} from './constants';
+import {GameConcept, TimeLimits} from './constants';
 import {questions} from './data/game-data';
 
 export default class GameModel {
@@ -9,8 +9,8 @@ export default class GameModel {
   restartGame() {
     this._gameState = {
       level: 0,
-      time: timeLimits.INITIAL_TIMER,
-      lives: gameConcept.NUMBER_OF_LIVES,
+      time: TimeLimits.INITIAL_TIMER,
+      lives: GameConcept.NUMBER_OF_LIVES,
       answers: []
     };
 
@@ -21,16 +21,16 @@ export default class GameModel {
     const gameTypes = questions.map((it) => it.category);
 
     const gameOrder = [];
-    for (let i = 0; i < gameConcept.NUMBER_OF_GAMES; i++) {
+    for (let i = 0; i < GameConcept.NUMBER_OF_GAMES; i++) {
       gameOrder[i] = gameTypes[Math.floor(Math.random() * (gameTypes.length))];
     }
     return gameOrder;
   }
 
   renewQuestionType() {
-    this._questionType = questions.find((question) =>
+    this._question = questions.find((question) =>
       question.category === this._gameOrder[this._gameState.level]);
-    return this._questionType;
+    return this._question;
   }
 
   die() {
@@ -46,7 +46,7 @@ export default class GameModel {
   }
 
   gameComplete() {
-    return this._gameState.level === gameConcept.NUMBER_OF_GAMES;
+    return this._gameState.level === GameConcept.NUMBER_OF_GAMES;
   }
 
   tick() {
@@ -54,7 +54,7 @@ export default class GameModel {
   }
 
   restartTimer() {
-    this._gameState.time = timeLimits.INITIAL_TIMER;
+    this._gameState.time = TimeLimits.INITIAL_TIMER;
   }
 
   get gameState() {

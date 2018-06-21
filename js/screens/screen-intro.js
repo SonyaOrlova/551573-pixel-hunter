@@ -1,5 +1,3 @@
-import App from '../application';
-
 import IntroView from '../views/view-intro';
 import FooterView from '../views/view-footer';
 
@@ -13,7 +11,9 @@ export default class IntroScreen {
     this.root.appendChild(this.footer.element);
   }
 
+  showNextScreen() { }
+
   init() {
-    this.content.onStartBtnClick = () => App.showGreeting();
+    this.content.onStartBtnClick = this.showNextScreen;
   }
 }

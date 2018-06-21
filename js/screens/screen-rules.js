@@ -1,5 +1,3 @@
-import App from '../application';
-
 import HeaderView from '../views/view-header';
 import RulesView from '../views/view-rules';
 import FooterView from '../views/view-footer';
@@ -16,8 +14,11 @@ export default class RulesScreen {
     this.root.appendChild(this.footer.element);
   }
 
+  showGreetScreen() { }
+  showNextScreen() { }
+
   init() {
-    this.header.onLogoClick = () => App.showGreeting();
+    this.header.onLogoClick = this.showGreetScreen;
 
     this.content.onInputChange = (input, submitBtn) => {
       if (input.value !== ``) {
@@ -27,7 +28,7 @@ export default class RulesScreen {
       }
     };
 
-    this.content.onFormSubmit = () => App.showGame();
+    this.content.onFormSubmit = this.showNextScreen;
   }
 }
 

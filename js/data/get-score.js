@@ -1,30 +1,30 @@
-import {scoringRules} from '../constants';
+import {ScoringRules} from '../constants';
 
 const getScore = (answers, lives) => {
 
   let gameResult = {
     correctAnswers: {
-      count: answers.filter((answer) => answer.isCorrect === true).length,
+      count: answers.filter((answer) => answer.isCorrect).length,
       get points() {
-        return this.count * scoringRules.CORRECT_ANSWER;
+        return this.count * ScoringRules.CORRECT_ANSWER;
       }
     },
     fastResponse: {
-      count: answers.filter((answer) => answer.isFast === true).length,
+      count: answers.filter((answer) => answer.isFast).length,
       get points() {
-        return this.count * scoringRules.FAST_RESPONSE;
+        return this.count * ScoringRules.FAST_RESPONSE;
       }
     },
     slowResponse: {
-      count: answers.filter((answer) => answer.isSlow === true).length,
+      count: answers.filter((answer) => answer.isSlow).length,
       get points() {
-        return this.count * scoringRules.SLOW_RESPONSE;
+        return this.count * ScoringRules.SLOW_RESPONSE;
       }
     },
     lives: {
       count: lives,
       get points() {
-        return this.count * scoringRules.REMAINING_LIFE;
+        return this.count * ScoringRules.REMAINING_LIFE;
       }
     },
     getTotalScore: () =>
