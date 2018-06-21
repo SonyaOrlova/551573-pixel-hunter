@@ -22,9 +22,10 @@ export default class GameScreen {
   }
 
   createQuestionView() {
-    const questionView = new QuestionView(this.model.renewQuestionType(), this.model._gameState);
+    const questionType = this.model.renewQuestionType();
+    const questionView = new QuestionView(questionType, this.model._gameState);
 
-    switch (this.model.renewQuestionType().answerType) {
+    switch (questionType.answerType) {
       case `radio`:
         questionView.onAnswer = (answers) => {
           this.onAnswer(answers.indexOf(false) === -1);
@@ -33,7 +34,7 @@ export default class GameScreen {
 
       case `point`:
         questionView.onAnswer = (target) => {
-          this.onAnswer(target.dataset.type === this.model.renewQuestionType().answerCorrect);
+          this.onAnswer(target.dataset.type === questionType.answerCorrect);
           this.changeGameLevel();
         }; break;
     }
