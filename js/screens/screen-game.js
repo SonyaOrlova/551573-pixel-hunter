@@ -42,7 +42,7 @@ export default class GameScreen {
 
   createHeaderView() {
     const headerView = new HeaderView(this.model.gameState);
-    headerView.onLogoClick = this.showModalConfirm();
+    headerView.onLogoClick = this.showModal;
     return headerView;
   }
 
@@ -120,5 +120,5 @@ export default class GameScreen {
   }
 
   showNextScreen() { }
-  showModalConfirm() { }
+  showModal() { }
 }
