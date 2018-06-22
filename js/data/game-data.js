@@ -29,7 +29,7 @@ export const questions = [
     category: `oneImage`,
     description: `Угадай, фото или рисунок?`,
     images: 1,
-    type: `radio`,
+    type: `classify`,
     inner: `game__content  game__content--wide`,
     params: [
       {
@@ -44,7 +44,7 @@ export const questions = [
     category: `twoImages`,
     description: `Угадайте для каждого изображения фото или рисунок?`,
     images: 2,
-    type: `radio`,
+    type: `classify`,
     inner: `game__content`,
     params: [
       {
@@ -65,7 +65,7 @@ export const questions = [
     category: `threeImagesPaint`,
     description: `Найдите рисунок среди изображений`,
     images: 3,
-    type: `point`,
+    type: `choose`,
     answerCorrect: `paint`,
     params: [
       {
@@ -92,7 +92,7 @@ export const questions = [
     category: `threeImagesPhoto`,
     description: `Найдите фотографию среди изображений`,
     images: 3,
-    type: `point`,
+    type: `choose`,
     answerCorrect: `photo`,
     params: [
       {

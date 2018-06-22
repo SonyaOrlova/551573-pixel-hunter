@@ -1,8 +1,8 @@
 import {TimeLimits} from '../constants';
 
 import HeaderView from '../views/view-header';
-import QuestionViewRadio from '../views/view-question-Radio.js';
-import QuestionViewPoint from '../views/view-question-Point.js';
+import QuestionViewClassify from '../views/view-question-classify';
+import QuestionViewChoose from '../views/view-question-choose';
 import FooterView from '../views/view-footer';
 
 export default class GameScreen {
@@ -25,8 +25,8 @@ export default class GameScreen {
     const questionType = question.type;
 
     const questionTypeMap = {
-      'radio': new QuestionViewRadio(question, this.model.gameState),
-      'point': new QuestionViewPoint(question, this.model.gameState)
+      'classify': new QuestionViewClassify(question, this.model.gameState),
+      'choose': new QuestionViewChoose(question, this.model.gameState)
     };
 
     const questionView = questionTypeMap[questionType];
@@ -38,7 +38,6 @@ export default class GameScreen {
 
     return questionView;
   }
-
 
   createHeaderView() {
     const headerView = new HeaderView(this.model.gameState);

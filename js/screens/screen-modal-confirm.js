@@ -1,4 +1,4 @@
-import ModalConfirmView from '../views/view-modalConfirm';
+import ModalConfirmView from '../views/view-modal-confirm';
 
 export default class ModalConfirmScreen {
   constructor() {

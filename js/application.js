@@ -2,7 +2,7 @@ import IntroScreen from './screens/screen-intro';
 import GreetingScreen from './screens/screen-greeting';
 import RulesScreen from './screens/screen-rules';
 import GameScreen from './screens/screen-game';
-import ModalConfirmScreen from './screens/screen-modalConfirm';
+import ModalConfirmScreen from './screens/screen-modal-confirm';
 import StatsScreen from './screens/screen-stats';
 
 import GameModel from './game-model';
