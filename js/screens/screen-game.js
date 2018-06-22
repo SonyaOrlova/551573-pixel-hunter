@@ -58,8 +58,11 @@ export default class GameScreen {
   }
 
   updateScreen() {
+    this.model.restartTimer();
+
     this.updateHeader();
     this.updateQuestion();
+
     this.startTimer();
   }
 
@@ -85,7 +88,6 @@ export default class GameScreen {
       this.showNextScreen();
     } else {
       this.updateScreen();
-      this.model.restartTimer();
     }
   }
 
