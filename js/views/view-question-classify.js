@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 // templates
-import statsBarTemplate from '../templates/template-statsBar';
+import statsBarTemplate from '../templates/template-stats-bar';
 // logic
 import resizeImage from '../data/resize-image';
 
