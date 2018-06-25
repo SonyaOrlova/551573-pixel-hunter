@@ -1,4 +1,4 @@
-import DataLoader from './utils/data-loader';
+import Loader from './utils/data-loader';
 import GameModel from './game-model';
 
 import IntroScreen from './screens/screen-intro';
@@ -20,17 +20,14 @@ const coverScreen = (screen) => {
   mainPage.appendChild(screen);
 };
 
-
-let gameData;
-
 export default class Application {
   static start() {
-    DataLoader.loadData().
-      then((data) => {
-        gameData = data;
-      }).
-      then(Application.showGreeting()).
-      catch(Application.showError);
+    Loader.loadData()
+    .then((data) => {
+      this.gameData = data;
+    })
+    .then(Application.showGreeting())
+    .catch(Application.showError);
   }
 
   static showIntro() {
@@ -50,12 +47,12 @@ export default class Application {
     const rules = new RulesScreen();
     showScreen(rules.root);
     rules.showGreetScreen = () => this.showGreeting();
-    rules.showNextScreen = () => this.showGame();
+    rules.showNextScreen = (playerName) => this.showGame(playerName);
     rules.init();
   }
 
-  static showGame() {
-    const model = new GameModel(gameData);
+  static showGame(playerName) {
+    const model = new GameModel(this.gameData, playerName);
     const game = new GameScreen(model);
     showScreen(game.root);
     game.showNextScreen = () => this.showStats(model.gameState);
@@ -63,11 +60,16 @@ export default class Application {
     game.startTimer();
   }
 
-  static showStats(gameState) {
-    const stats = new StatsScreen(gameState);
-    showScreen(stats.root);
-    stats.showGreetScreen = () => this.showGreeting();
-    stats.init();
+  static showStats(model) {
+    Loader.saveResults(model.gameState, model.playerName)
+    .then(() => Loader.loadResults(model.playerName))
+    .then((data) => {
+      const stats = new StatsScreen(data);
+      showScreen(stats.root);
+      stats.showGreetScreen = () => this.showGreeting();
+      stats.init();
+    })
+    .catch(Application.showError);
   }
 
   static showModalConfirm() {

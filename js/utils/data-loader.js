@@ -1,6 +1,9 @@
-import {adaptServerData} from './data-adapter';
+import adaptServerData from './data-adapter';
 
 const SERVER_URL = `https://es.dump.academy/pixel-hunter/questions`;
+
+const DEFAULT_NAME = `test`;
+const APP_ID = 54198800;
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
@@ -10,11 +13,30 @@ const checkStatus = (response) => {
   }
 };
 
-export default class DataLoader {
+export default class Loader {
   static loadData() {
-    return fetch(`${SERVER_URL}`).
-    then(checkStatus).
-    then((response) => response.json()).
-    then((data) => adaptServerData(data));
+    return fetch(`${SERVER_URL}`)
+    .then(checkStatus)
+    .then((response) => response.json())
+    .then((data) => adaptServerData(data));
+  }
+
+  static loadResults(name = DEFAULT_NAME) {
+    return fetch(`${SERVER_URL}/stats/${APP_ID}-${name}`)
+    .then(checkStatus)
+    .then((response) => response.json());
+  }
+
+  static saveResults(data, name = DEFAULT_NAME) {
+    data = Object.assign({name}, data);
+    const requestSettings = {
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': `application/json`
+      },
+      method: `POST`
+    };
+    return fetch(`${SERVER_URL}/stats/${APP_ID}-${name}`, requestSettings)
+    .then(checkStatus);
   }
 }

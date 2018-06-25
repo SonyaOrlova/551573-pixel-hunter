@@ -1,31 +1,24 @@
 import {GameConcept} from '../utils/constants';
 
 const renewAnswerIndicator = (answer) => {
-  if (answer === undefined) {
-    return `stats__result--unknown`;
+  let answerType;
+  switch (answer) {
+    case `fast`: answerType = `stats__result--fast`; break;
+    case `slow`: answerType = `stats__result--slow`; break;
+    case `correct`: answerType = `stats__result--correct`; break;
+    case `wrong`: answerType = `stats__result--wrong`; break;
+    case undefined: answerType = `stats__result--unknown`; break;
+    default: return null;
   }
-  if (!answer.isCorrect) {
-    return `stats__result--wrong`;
-  }
-  if (answer.isFast) {
-    return `stats__result--fast`;
-  }
-  if (answer.isSlow) {
-    return `stats__result--slow`;
-  }
-  if (answer.isCorrect) {
-    return `stats__result--correct`;
-  } else {
-    return null;
-  }
+  return answerType;
 };
 
-const statsBarTemplate = (gameStatus) =>
+const statsBarTemplate = (answers) =>
   `
     <div class="stats">
       <ul class="stats">
-      ${new Array(GameConcept.NUMBER_OF_GAMES).fill().map((it, i) =>`
-      <li class="stats__result ${renewAnswerIndicator(gameStatus.answers[i])}"></li>
+      ${new Array(GameConcept.NUMBER_OF_GAMES).fill().map((answer, index) =>`
+      <li class="stats__result ${renewAnswerIndicator(answers[index])}"></li>
       `).join(``)}
       </ul>
     </div>

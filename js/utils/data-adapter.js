@@ -1,4 +1,4 @@
-export const adaptServerData = (data) => {
+export default (data) => {
   const adapted = [];
 
   data.forEach((it) => {

@@ -30,7 +30,7 @@ export default class QuestionViewClassify extends AbstractView {
       </div>
       `).join(``)}
     </form>
-    ${statsBarTemplate(this.gameState)}
+    ${statsBarTemplate(this.gameState.answers)}
     </div>
     `;
   }

@@ -45,27 +45,6 @@ export default class GameScreen {
     return headerView;
   }
 
-  updateQuestion() {
-    const nextQuestionView = this.createQuestionView();
-    this.root.replaceChild(nextQuestionView.element, this.content.element);
-    this.content = nextQuestionView;
-  }
-
-  updateHeader() {
-    const nextHeaderView = this.createHeaderView();
-    this.root.replaceChild(nextHeaderView.element, this.header.element);
-    this.header = nextHeaderView;
-  }
-
-  updateScreen() {
-    this.model.renewTimer();
-
-    this.updateHeader();
-    this.updateQuestion();
-
-    this.startTimer();
-  }
-
   startTimer() {
     this._interval = setInterval(() => {
       this.model.tick();
@@ -94,30 +73,50 @@ export default class GameScreen {
   onAnswer(result) {
     this.clearTimer();
 
-    const answer = {
-      isCorrect: result,
-      time: TimeLimits.INITIAL_TIMER - this.model.gameState.time,
-      get isFast() {
-        if (this.isCorrect) {
-          return this.time < TimeLimits.QUICK_RESPONSE_TIMELIMIT;
-        } else {
-          return undefined;
-        }
-      },
-      get isSlow() {
-        if (this.isCorrect) {
-          return this.time > TimeLimits.SLOW_RESPONSE_TIMELIMIT;
-        } else {
-          return undefined;
-        }
-      }
-    };
+    let answer;
+    const answerTime = TimeLimits.INITIAL_TIMER - this.model.gameState.time;
+    const answerResult = result;
 
-    if (!answer.isCorrect) {
+    if (answerResult) {
+      if (answerTime < TimeLimits.QUICK_RESPONSE_TIMELIMIT) {
+        answer = `fast`;
+      } else if (answerTime > TimeLimits.SLOW_RESPONSE_TIMELIMIT) {
+        answer = `slow`;
+      } else {
+        answer = `correct`;
+      }
+      // answerTime < TimeLimits.QUICK_RESPONSE_TIMELIMIT ? answer = `fast` :
+      // answerTime > TimeLimits.SLOW_RESPONSE_TIMELIMIT ? answer = `slow` : answer = `correct`;
+    } else {
+      answer = `wrong`;
+    }
+
+    if (answer === `wrong`) {
       this.model.die();
     }
 
     this.model.gameState.answers.push(answer);
+  }
+
+  updateQuestion() {
+    const nextQuestionView = this.createQuestionView();
+    this.root.replaceChild(nextQuestionView.element, this.content.element);
+    this.content = nextQuestionView;
+  }
+
+  updateHeader() {
+    const nextHeaderView = this.createHeaderView();
+    this.root.replaceChild(nextHeaderView.element, this.header.element);
+    this.header = nextHeaderView;
+  }
+
+  updateScreen() {
+    this.model.renewTimer();
+
+    this.updateHeader();
+    this.updateQuestion();
+
+    this.startTimer();
   }
 
   showNextScreen() { }

@@ -23,7 +23,7 @@ export default class QuestionViewChoose extends AbstractView {
       <img src="${answer.src}" alt="Option 1">
       </div>`).join(``)}
     </form>
-    ${statsBarTemplate(this.gameState)}
+    ${statsBarTemplate(this.gameState.answers)}
     </div>
     `;
   }
