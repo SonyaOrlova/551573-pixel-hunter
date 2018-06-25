@@ -7,7 +7,7 @@ import getScore from '../utils/get-score';
 export default class StatsView extends AbstractView {
   constructor(data) {
     super();
-    this.data = data;
+    this.data = data.reverse();
     this.title = this.data[0].lives > 0 ? `Победа!` : `Проигрыш :(`;
   }
 

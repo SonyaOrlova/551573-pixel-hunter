@@ -61,6 +61,7 @@ export default class GameScreen {
   }
 
   changeGameLevel() {
+    this.clearTimer();
     this.model.nextLevel();
 
     if (this.model.isDead() || this.model.gameComplete()) {
@@ -71,8 +72,6 @@ export default class GameScreen {
   }
 
   onAnswer(result) {
-    this.clearTimer();
-
     let answer;
     const answerTime = TimeLimits.INITIAL_TIMER - this.model.gameState.time;
     const answerResult = result;

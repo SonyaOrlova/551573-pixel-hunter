@@ -1,6 +1,6 @@
 import adaptServerData from './data-adapter';
 
-const SERVER_URL = `https://es.dump.academy/pixel-hunter/questions`;
+const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
 
 const DEFAULT_NAME = `test`;
 const APP_ID = 54198800;
@@ -15,7 +15,7 @@ const checkStatus = (response) => {
 
 export default class Loader {
   static loadData() {
-    return fetch(`${SERVER_URL}`)
+    return fetch(`${SERVER_URL}/questions`)
     .then(checkStatus)
     .then((response) => response.json())
     .then((data) => adaptServerData(data));
@@ -28,7 +28,6 @@ export default class Loader {
   }
 
   static saveResults(data, name = DEFAULT_NAME) {
-    data = Object.assign({name}, data);
     const requestSettings = {
       body: JSON.stringify(data),
       headers: {
