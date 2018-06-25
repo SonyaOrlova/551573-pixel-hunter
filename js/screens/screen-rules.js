@@ -20,11 +20,11 @@ export default class RulesScreen {
   init() {
     this.header.onLogoClick = this.showGreetScreen;
 
-    this.content.onInputChange = (input, submitBtn) => {
-      if (input.value !== ``) {
-        submitBtn.disabled = false;
+    this.content.onInputChange = (value) => {
+      if (value !== ``) {
+        this.content.enableBtn();
       } else {
-        submitBtn.disabled = true;
+        this.content.disableBtn();
       }
     };
 

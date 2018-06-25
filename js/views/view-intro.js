@@ -16,10 +16,10 @@ export default class IntroView extends AbstractView {
     `;
   }
 
-  onStartBtnClick() { }
+  // onStartBtnClick() { }
 
-  bind() {
-    const startBtn = this.element.querySelector(`.intro__asterisk`);
-    startBtn.addEventListener(`click`, () => this.onStartBtnClick());
-  }
+  // bind() {
+  //   const startBtn = this.element.querySelector(`.intro__asterisk`);
+  //   startBtn.addEventListener(`click`, () => this.onStartBtnClick());
+  // }
 }

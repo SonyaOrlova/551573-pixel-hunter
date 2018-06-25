@@ -11,9 +11,9 @@ export default class IntroScreen {
     this.root.appendChild(this.footer.element);
   }
 
-  showNextScreen() { }
+  // showNextScreen() { }
 
-  init() {
-    this.content.onStartBtnClick = this.showNextScreen;
-  }
+  // init() {
+  //   this.content.onStartBtnClick = this.showNextScreen;
+  // }
 }
