@@ -55,7 +55,7 @@ export default class Application {
     const model = new GameModel(this.gameData, playerName);
     const game = new GameScreen(model);
     showScreen(game.root);
-    game.showNextScreen = () => this.showStats(model.gameState);
+    game.showNextScreen = () => this.showStats(model);
     game.showModal = () => this.showModalConfirm();
     game.startTimer();
   }

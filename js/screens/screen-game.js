@@ -85,8 +85,6 @@ export default class GameScreen {
       } else {
         answer = `correct`;
       }
-      // answerTime < TimeLimits.QUICK_RESPONSE_TIMELIMIT ? answer = `fast` :
-      // answerTime > TimeLimits.SLOW_RESPONSE_TIMELIMIT ? answer = `slow` : answer = `correct`;
     } else {
       answer = `wrong`;
     }
