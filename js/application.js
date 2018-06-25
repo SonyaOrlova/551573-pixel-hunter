@@ -1,11 +1,13 @@
+import DataLoader from './utils/data-loader';
+import GameModel from './game-model';
+
 import IntroScreen from './screens/screen-intro';
 import GreetingScreen from './screens/screen-greeting';
 import RulesScreen from './screens/screen-rules';
 import GameScreen from './screens/screen-game';
-import ModalConfirmScreen from './screens/screen-modal-confirm';
 import StatsScreen from './screens/screen-stats';
-
-import GameModel from './game-model';
+import ModalConfirmScreen from './screens/screen-modal-confirm';
+import ErrorScreen from './screens/screen-error';
 
 const mainPage = document.querySelector(`.central`);
 
@@ -18,13 +20,23 @@ const coverScreen = (screen) => {
   mainPage.appendChild(screen);
 };
 
+
+let gameData;
+
 export default class Application {
+  static start() {
+    DataLoader.loadData().
+      then((data) => {
+        gameData = data;
+      }).
+      then(Application.showGreeting()).
+      catch(Application.showError);
+  }
+
   static showIntro() {
     const intro = new IntroScreen();
     showScreen(intro.root);
-    intro.showNextScreen = () => this.showGreeting();
-    intro.init();
-
+    this.start();
   }
 
   static showGreeting() {
@@ -42,15 +54,8 @@ export default class Application {
     rules.init();
   }
 
-  static showStats(gameState) {
-    const stats = new StatsScreen(gameState);
-    showScreen(stats.root);
-    stats.showGreetScreen = () => this.showGreeting();
-    stats.init();
-  }
-
   static showGame() {
-    const model = new GameModel();
+    const model = new GameModel(gameData);
     const game = new GameScreen(model);
     showScreen(game.root);
     game.showNextScreen = () => this.showStats(model.gameState);
@@ -58,10 +63,22 @@ export default class Application {
     game.startTimer();
   }
 
+  static showStats(gameState) {
+    const stats = new StatsScreen(gameState);
+    showScreen(stats.root);
+    stats.showGreetScreen = () => this.showGreeting();
+    stats.init();
+  }
+
   static showModalConfirm() {
     const modalConfirm = new ModalConfirmScreen();
     coverScreen(modalConfirm.root);
     modalConfirm.showGreetScreen = () => this.showGreeting();
     modalConfirm.init();
+  }
+
+  static showError() {
+    const error = new ErrorScreen();
+    showScreen(error.root);
   }
 }

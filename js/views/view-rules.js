@@ -37,7 +37,8 @@ export default class RulesView extends AbstractView {
     });
 
     const form = this.element.querySelector(`.rules__form`);
-    form.addEventListener(`submit`, () => {
+    form.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
       this.onFormSubmit();
     });
   }

@@ -1,4 +1,4 @@
-import {GameConcept} from '../constants.js';
+import {GameConcept} from '../utils/constants';
 
 const renewAnswerIndicator = (answer) => {
   if (answer === undefined) {

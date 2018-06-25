@@ -1,4 +1,4 @@
-import {ScoringRules} from '../constants';
+import {ScoringRules} from './constants';
 
 const getScore = (answers, lives) => {
 

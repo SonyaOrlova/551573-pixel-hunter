@@ -2,7 +2,7 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import getScore from '../data/get-score';
+import getScore from '../utils/get-score';
 
 export default class StatsView extends AbstractView {
   constructor(gameState) {

@@ -2,7 +2,7 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import resizeImage from '../data/resize-image';
+import resizeImage from '../utils/resize-image';
 
 export default class QuestionViewClassify extends AbstractView {
   constructor(question, gameState) {
@@ -16,15 +16,15 @@ export default class QuestionViewClassify extends AbstractView {
     <div class="game">
     <p class="game__task">${this.question.description}</p>
     <form class="${this.question.inner}">
-    ${[...this.question.params].map((param) => `
-      <div class="game__option" data-type="${param.class}" data-number="${param.index}">
-      <img src="${param.src}" alt="Option ${param.index}" width="705" height="455">
+    ${[...this.question.answers].map((answer, index) => `
+      <div class="game__option" data-type="${answer.class}">
+      <img src="${answer.src}" alt="Option ${index + 1}">
       <label class="game__answer  game__answer--photo">
-      <input name="question${param.index}" type="radio" value="photo">
+      <input name="question${index + 1}" type="radio" value="photo">
       <span>Фото</span>
       </label>
       <label class="game__answer  game__answer--wide  game__answer--paint">
-      <input name="question${param.index}" type="radio" value="paint">
+      <input name="question${index + 1}" type="radio" value="paint">
       <span>Рисунок</span>
       </label>
       </div>

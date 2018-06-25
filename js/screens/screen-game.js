@@ -1,4 +1,4 @@
-import {TimeLimits} from '../constants';
+import {TimeLimits} from '../utils/constants';
 
 import HeaderView from '../views/view-header';
 import QuestionViewClassify from '../views/view-question-classify';
@@ -22,7 +22,7 @@ export default class GameScreen {
 
   createQuestionView() {
     const question = this.model.renewQuestionType();
-    const questionType = question.type;
+    const questionType = question.category;
 
     const questionTypeMap = {
       'classify': new QuestionViewClassify(question, this.model.gameState),
@@ -58,7 +58,7 @@ export default class GameScreen {
   }
 
   updateScreen() {
-    this.model.restartTimer();
+    this.model.renewTimer();
 
     this.updateHeader();
     this.updateQuestion();

@@ -1,4 +1,4 @@
-import {createDomElement} from '../util';
+import createDomElement from '../utils/create-element.js';
 
 class AbstractView {
   constructor() {

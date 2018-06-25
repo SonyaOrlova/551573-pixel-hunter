@@ -2,23 +2,25 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import resizeImage from '../data/resize-image';
+import resizeImage from '../utils/resize-image';
 
 export default class QuestionViewChoose extends AbstractView {
   constructor(question, gameState) {
     super();
     this.question = question;
     this.gameState = gameState;
+
+    this.answerCorrect = this.question.description === `Найдите рисунок среди изображений` ? `paint` : `photo`;
   }
 
   get template() {
     return `
     <div class="game">
     <p class="game__task">${this.question.description}</p>
-    <form class="game__content game__content--triple">
-    ${[...this.question.params].map((param) => `
-      <div class="game__option" data-type="${param.class}">
-      <img src="${param.src}" alt="Option 1" width="304" height="455">
+    <form class="${this.question.inner}">
+    ${[...this.question.answers].map((answer) => `
+      <div class="game__option" data-type="${answer.class}">
+      <img src="${answer.src}" alt="Option 1">
       </div>`).join(``)}
     </form>
     ${statsBarTemplate(this.gameState)}
@@ -64,7 +66,7 @@ export default class QuestionViewChoose extends AbstractView {
     options.forEach((option) => {
       option.addEventListener(`click`, (evt) => {
         const target = evt.target;
-        const result = target.dataset.type === this.question.answerCorrect;
+        const result = target.dataset.type === this.answerCorrect;
 
         this.onAnswer(result);
       });
