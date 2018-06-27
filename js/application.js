@@ -1,11 +1,13 @@
+import Loader from './utils/data-loader';
+import GameModel from './game-model';
+
 import IntroScreen from './screens/screen-intro';
 import GreetingScreen from './screens/screen-greeting';
 import RulesScreen from './screens/screen-rules';
 import GameScreen from './screens/screen-game';
-import ModalConfirmScreen from './screens/screen-modal-confirm';
 import StatsScreen from './screens/screen-stats';
-
-import GameModel from './game-model';
+import ModalConfirmScreen from './screens/screen-modal-confirm';
+import ErrorScreen from './screens/screen-error';
 
 const mainPage = document.querySelector(`.central`);
 
@@ -19,12 +21,19 @@ const coverScreen = (screen) => {
 };
 
 export default class Application {
+  static start() {
+    Loader.loadData()
+    .then((data) => {
+      this.gameData = data;
+    })
+    .then(Application.showGreeting())
+    .catch(Application.showError);
+  }
+
   static showIntro() {
     const intro = new IntroScreen();
     showScreen(intro.root);
-    intro.showNextScreen = () => this.showGreeting();
-    intro.init();
-
+    this.start();
   }
 
   static showGreeting() {
@@ -38,24 +47,29 @@ export default class Application {
     const rules = new RulesScreen();
     showScreen(rules.root);
     rules.showGreetScreen = () => this.showGreeting();
-    rules.showNextScreen = () => this.showGame();
+    rules.showNextScreen = (playerName) => this.showGame(playerName);
     rules.init();
   }
 
-  static showStats(gameState) {
-    const stats = new StatsScreen(gameState);
-    showScreen(stats.root);
-    stats.showGreetScreen = () => this.showGreeting();
-    stats.init();
-  }
-
-  static showGame() {
-    const model = new GameModel();
+  static showGame(playerName) {
+    const model = new GameModel(this.gameData, playerName);
     const game = new GameScreen(model);
     showScreen(game.root);
-    game.showNextScreen = () => this.showStats(model.gameState);
+    game.showNextScreen = () => this.showStats(model);
     game.showModal = () => this.showModalConfirm();
     game.startTimer();
+  }
+
+  static showStats(model) {
+    Loader.saveResults(model.gameState, model.playerName)
+    .then(() => Loader.loadResults(model.playerName))
+    .then((data) => {
+      const stats = new StatsScreen(data);
+      showScreen(stats.root);
+      stats.showGreetScreen = () => this.showGreeting();
+      stats.init();
+    })
+    .catch(Application.showError);
   }
 
   static showModalConfirm() {
@@ -63,5 +77,10 @@ export default class Application {
     coverScreen(modalConfirm.root);
     modalConfirm.showGreetScreen = () => this.showGreeting();
     modalConfirm.init();
+  }
+
+  static showError() {
+    const error = new ErrorScreen();
+    showScreen(error.root);
   }
 }

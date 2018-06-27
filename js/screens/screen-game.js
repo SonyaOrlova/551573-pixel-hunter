@@ -1,4 +1,4 @@
-import {TimeLimits} from '../constants';
+import {TimeLimits} from '../utils/constants';
 
 import HeaderView from '../views/view-header';
 import QuestionViewClassify from '../views/view-question-classify';
@@ -22,7 +22,7 @@ export default class GameScreen {
 
   createQuestionView() {
     const question = this.model.renewQuestionType();
-    const questionType = question.type;
+    const questionType = question.category;
 
     const questionTypeMap = {
       'classify': new QuestionViewClassify(question, this.model.gameState),
@@ -45,27 +45,6 @@ export default class GameScreen {
     return headerView;
   }
 
-  updateQuestion() {
-    const nextQuestionView = this.createQuestionView();
-    this.root.replaceChild(nextQuestionView.element, this.content.element);
-    this.content = nextQuestionView;
-  }
-
-  updateHeader() {
-    const nextHeaderView = this.createHeaderView();
-    this.root.replaceChild(nextHeaderView.element, this.header.element);
-    this.header = nextHeaderView;
-  }
-
-  updateScreen() {
-    this.model.restartTimer();
-
-    this.updateHeader();
-    this.updateQuestion();
-
-    this.startTimer();
-  }
-
   startTimer() {
     this._interval = setInterval(() => {
       this.model.tick();
@@ -82,6 +61,7 @@ export default class GameScreen {
   }
 
   changeGameLevel() {
+    this.clearTimer();
     this.model.nextLevel();
 
     if (this.model.isDead() || this.model.gameComplete()) {
@@ -92,32 +72,48 @@ export default class GameScreen {
   }
 
   onAnswer(result) {
-    this.clearTimer();
+    let answer;
+    const answerTime = TimeLimits.INITIAL_TIMER - this.model.gameState.time;
+    const answerResult = result;
 
-    const answer = {
-      isCorrect: result,
-      time: TimeLimits.INITIAL_TIMER - this.model.gameState.time,
-      get isFast() {
-        if (this.isCorrect) {
-          return this.time < TimeLimits.QUICK_RESPONSE_TIMELIMIT;
-        } else {
-          return undefined;
-        }
-      },
-      get isSlow() {
-        if (this.isCorrect) {
-          return this.time > TimeLimits.SLOW_RESPONSE_TIMELIMIT;
-        } else {
-          return undefined;
-        }
+    if (answerResult) {
+      if (answerTime < TimeLimits.QUICK_RESPONSE_TIMELIMIT) {
+        answer = `fast`;
+      } else if (answerTime > TimeLimits.SLOW_RESPONSE_TIMELIMIT) {
+        answer = `slow`;
+      } else {
+        answer = `correct`;
       }
-    };
+    } else {
+      answer = `wrong`;
+    }
 
-    if (!answer.isCorrect) {
+    if (answer === `wrong`) {
       this.model.die();
     }
 
     this.model.gameState.answers.push(answer);
+  }
+
+  updateQuestion() {
+    const nextQuestionView = this.createQuestionView();
+    this.root.replaceChild(nextQuestionView.element, this.content.element);
+    this.content = nextQuestionView;
+  }
+
+  updateHeader() {
+    const nextHeaderView = this.createHeaderView();
+    this.root.replaceChild(nextHeaderView.element, this.header.element);
+    this.header = nextHeaderView;
+  }
+
+  updateScreen() {
+    this.model.renewTimer();
+
+    this.updateHeader();
+    this.updateQuestion();
+
+    this.startTimer();
   }
 
   showNextScreen() { }
