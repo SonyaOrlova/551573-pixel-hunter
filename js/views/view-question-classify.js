@@ -48,38 +48,35 @@ export default class QuestionViewClassify extends AbstractView {
   bind() {
 
     const images = this.element.querySelectorAll(`.game__option > img`);
-    renderImages(images);
+    renderImages(images); // отрисовка и ресайз
 
-    const form = this.element.querySelector(`.game__content`);
+    let answers = [];
+
     const options = this.element.querySelectorAll(`.game__option`);
-
     options.forEach((option) => {
       let optionValue = option.dataset.type;
       let versions = option.querySelectorAll(`input`);
+
+      // дебаггер
       let correctVersion = [...versions].find((version) => version.value === optionValue);
-      let correctVersionInner = correctVersion.parentNode;
-      correctVersionInner.classList.add(`correct-answer`);
-    });
+      let correctVersionBtn = correctVersion.parentNode.querySelector(`span`);
+      correctVersionBtn.classList.add(`correct-answer`);
 
-    form.addEventListener(`change`, () => {
-      let answers = [];
-
-      options.forEach((option) => {
-        let optionValue = option.dataset.type;
-        let versions = option.querySelectorAll(`input`);
-
+      // обработчик ответа
+      option.addEventListener(`click`, () => {
         versions.forEach((version) => {
           if (version.checked) {
             let answerValue = version.value;
             answers.push(optionValue === answerValue);
           }
         });
+        if (options.length === answers.length) {
+          const result = !answers.includes(false);
+          this.onAnswer(result);
+        }
       });
-
-      if (options.length === answers.length) {
-        const result = !answers.includes(false);
-        this.onAnswer(result);
-      }
     });
   }
 }
+
+
