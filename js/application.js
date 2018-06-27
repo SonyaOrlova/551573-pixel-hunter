@@ -21,19 +21,19 @@ const coverScreen = (screen) => {
 };
 
 export default class Application {
-  static start() {
-    Loader.loadData()
-    .then((data) => {
-      this.gameData = data;
-    })
-    .then(Application.showGreeting())
-    .catch(Application.showError);
-  }
-
-  static showIntro() {
+  static async load() {
     const intro = new IntroScreen();
     showScreen(intro.root);
-    this.start();
+    try {
+      this.gameData = await Loader.loadData();
+      Application.showGreeting();
+    } catch (error) {
+      Application.showError(error);
+    }
+  }
+
+  static start() {
+    Application.load().catch(Application.showError);
   }
 
   static showGreeting() {
@@ -60,16 +60,19 @@ export default class Application {
     game.startTimer();
   }
 
-  static showStats(model) {
-    Loader.saveResults(model.gameState, model.playerName)
-    .then(() => Loader.loadResults(model.playerName))
-    .then((data) => {
-      const stats = new StatsScreen(data);
+  static async showStats(model) {
+    try {
+      await Loader.saveResults(model.gameState, model.playerName);
+
+      this.gameResults = await Loader.loadResults(model.playerName);
+
+      const stats = new StatsScreen(this.gameResults);
       showScreen(stats.root);
       stats.showGreetScreen = () => this.showGreeting();
       stats.init();
-    })
-    .catch(Application.showError);
+    } catch (error) {
+      Application.showError(error);
+    }
   }
 
   static showModalConfirm() {

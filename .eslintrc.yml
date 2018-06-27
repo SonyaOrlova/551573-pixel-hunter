@@ -5,7 +5,7 @@ parserOptions:
 env:
   es6: true
   browser: true
-  # commonjs: true
+  commonjs: true
   mocha: true
 
 extends: 'htmlacademy/es6'

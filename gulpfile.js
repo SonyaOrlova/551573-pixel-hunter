@@ -14,9 +14,10 @@ const imagemin = require(`gulp-imagemin`);
 const rollup = require(`gulp-better-rollup`);
 const sourcemaps = require(`gulp-sourcemaps`);
 const mocha = require(`gulp-mocha`);
-const commonjs = require(`rollup-plugin-commonjs`);
-const babel = require(`rollup-plugin-babel`);
-var uglify = require("gulp-uglify");
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
+const uglify = require('gulp-uglify');
 
 gulp.task(`style`, () => {
   return gulp.src(`sass/style.scss`).
@@ -41,32 +42,30 @@ gulp.task(`style`, () => {
   pipe(gulp.dest(`build/css`));
 });
 
-gulp.task(`scripts`, () => {
-  return gulp.src(`js/main.js`)
+gulp.task('scripts', function () {
+  return gulp.src('js/main.js')
   .pipe(plumber())
   .pipe(sourcemaps.init())
   .pipe(rollup({
     plugins: [
-    // resolve node_modules
     resolve({browser: true}),
-    resolve commonjs imports commonjs(),
-// use babel to transpile into ES5
+    commonjs(),
     babel({
       babelrc: false,
-      exclude: `node_modules/**`,
+      exclude: 'node_modules/**',
       presets: [
-      [`env`, {modules: false}]
+      ['env', {modules: false}]
       ],
       plugins: [
-      `external-helpers`,
+      'external-helpers',
       ]
     })
-  ]
-}, `iife`))
-  .pipe(uglify())
-  .pipe(sourcemaps.write(``))
+    ]
+  }, 'iife'))
+  .pipe(sourcemaps.write(''))
+  // .pipe(uglify())
   .pipe(rename(`output.js`))
-  .pipe(gulp.dest(`build/js`));
+  .pipe(gulp.dest('build/js'));
 });
 
 gulp.task(`imagemin`, [`copy`], () => {
