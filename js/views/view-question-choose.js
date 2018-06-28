@@ -3,6 +3,7 @@ import AbstractView from './abstract-view';
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
 import renderImages from '../utils/render-images';
+import renderDebug from '../utils/render-debug';
 
 export default class QuestionViewChoose extends AbstractView {
   constructor(question, gameState) {
@@ -30,23 +31,18 @@ export default class QuestionViewChoose extends AbstractView {
 
   onAnswer() { }
   onDebug(debug) {
-    if (debug) {
-      const correctAnswers = this.element.querySelectorAll(`.correct-answer`);
-      correctAnswers.forEach((correctAnswer) => {
-        correctAnswer.style.outline = `10px solid green`;
-      });
-    }
+    return debug ? renderDebug(this.element) : null;
   }
 
   bind() {
 
-    const images = this.element.querySelectorAll(`.game__option > img`);
-    renderImages(images); // отрисовка и ресайз
+    renderImages(this.element); // отрисовка и ресайз
 
     const options = this.element.querySelectorAll(`.game__option`);
     options.forEach((option) => {
+
       // дебаггер
-      let correctVersion = [...options].find((version) => version.dataset.type === this.answerCorrect);
+      const correctVersion = [...options].find((version) => version.dataset.type === this.answerCorrect);
       correctVersion.classList.add(`correct-answer`);
 
       // обработчик ответа

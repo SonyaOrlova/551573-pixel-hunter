@@ -4,7 +4,7 @@ const resizeImage = (frame, given) => {
     byHeight: frame.height / given.height
   };
   const minRatio = Math.min(ratio.byWidth, ratio.byHeight);
-  let optimized = {
+  const optimized = {
     width: given.width * minRatio,
     height: given.height * minRatio
   };
@@ -32,7 +32,8 @@ const onLoadImage = (image) => {
   image.height = optimizedSize.height;
 };
 
-export default (images) =>
+export default (element) => {
+  const images = element.querySelectorAll(`.game__option > img`);
   images.forEach((image) => {
     image.parentNode.style.display = `none`;
     image.style.pointerEvents = `none`; // для firefox click div
@@ -41,3 +42,4 @@ export default (images) =>
       onLoadImage(image);
     });
   });
+};

@@ -3,6 +3,7 @@ import AbstractView from './abstract-view';
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
 import renderImages from '../utils/render-images';
+import renderDebug from '../utils/render-debug';
 
 export default class QuestionViewClassify extends AbstractView {
   constructor(question, gameState) {
@@ -37,36 +38,30 @@ export default class QuestionViewClassify extends AbstractView {
 
   onAnswer() { }
   onDebug(debug) {
-    if (debug) {
-      const correctAnswers = this.element.querySelectorAll(`.correct-answer`);
-      correctAnswers.forEach((correctAnswer) => {
-        correctAnswer.style.outline = `10px solid green`;
-      });
-    }
+    return debug ? renderDebug(this.element) : null;
   }
 
   bind() {
 
-    const images = this.element.querySelectorAll(`.game__option > img`);
-    renderImages(images); // отрисовка и ресайз
+    renderImages(this.element); // отрисовка и ресайз
 
-    let answers = [];
+    const answers = [];
 
     const options = this.element.querySelectorAll(`.game__option`);
     options.forEach((option) => {
-      let optionValue = option.dataset.type;
-      let versions = option.querySelectorAll(`input`);
+      const optionValue = option.dataset.type;
+      const versions = option.querySelectorAll(`input`);
 
       // дебаггер
-      let correctVersion = [...versions].find((version) => version.value === optionValue);
-      let correctVersionBtn = correctVersion.parentNode.querySelector(`span`);
+      const correctVersion = [...versions].find((version) => version.value === optionValue);
+      const correctVersionBtn = correctVersion.parentNode.querySelector(`span`);
       correctVersionBtn.classList.add(`correct-answer`);
 
       // обработчик ответа
       option.addEventListener(`click`, () => {
         versions.forEach((version) => {
           if (version.checked) {
-            let answerValue = version.value;
+            const answerValue = version.value;
             answers.push(optionValue === answerValue);
           }
         });
