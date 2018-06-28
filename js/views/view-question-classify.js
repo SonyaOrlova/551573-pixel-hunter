@@ -2,7 +2,8 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import resizeImage from '../data/resize-image';
+import renderImages from '../utils/render-images';
+import renderDebug from '../utils/render-debug';
 
 export default class QuestionViewClassify extends AbstractView {
   constructor(question, gameState) {
@@ -16,80 +17,62 @@ export default class QuestionViewClassify extends AbstractView {
     <div class="game">
     <p class="game__task">${this.question.description}</p>
     <form class="${this.question.inner}">
-    ${[...this.question.params].map((param) => `
-      <div class="game__option" data-type="${param.class}" data-number="${param.index}">
-      <img src="${param.src}" alt="Option ${param.index}" width="705" height="455">
+    ${[...this.question.answers].map((answer, index) => `
+      <div class="game__option" data-type="${answer.class}">
+      <img src="${answer.src}" alt="Option ${index + 1}">
       <label class="game__answer  game__answer--photo">
-      <input name="question${param.index}" type="radio" value="photo">
+      <input name="question${index + 1}" type="radio" value="photo">
       <span>Фото</span>
       </label>
       <label class="game__answer  game__answer--wide  game__answer--paint">
-      <input name="question${param.index}" type="radio" value="paint">
+      <input name="question${index + 1}" type="radio" value="paint">
       <span>Рисунок</span>
       </label>
       </div>
       `).join(``)}
     </form>
-    ${statsBarTemplate(this.gameState)}
+    ${statsBarTemplate(this.gameState.answers)}
     </div>
     `;
   }
 
   onAnswer() { }
-  onGameImageLoad(image) {
-
-    image.parentNode.style.display = `block`;
-
-    const frameSize = {
-      width: image.parentNode.clientWidth,
-      height: image.parentNode.clientHeight
-    };
-
-    const naturalSize = {
-      width: image.naturalWidth,
-      height: image.naturalHeight
-    };
-
-    const optimizedSize = resizeImage(frameSize, naturalSize);
-
-    image.width = optimizedSize.width;
-    image.height = optimizedSize.height;
+  onDebug(debug) {
+    return debug ? renderDebug(this.element) : null;
   }
 
   bind() {
 
-    const images = this.element.querySelectorAll(`.game__option > img`);
-    images.forEach((image) => {
-      image.parentNode.style.display = `none`;
+    renderImages(this.element); // отрисовка и ресайз
 
-      image.addEventListener(`load`, () => {
-        this.onGameImageLoad(image);
-      });
-    });
+    const answers = [];
 
-    const form = this.element.querySelector(`.game__content`);
     const options = this.element.querySelectorAll(`.game__option`);
+    options.forEach((option) => {
+      const optionValue = option.dataset.type;
+      const versions = option.querySelectorAll(`input`);
 
-    form.addEventListener(`change`, () => {
+      // дебаггер
+      const correctVersion = [...versions].find((version) => version.value === optionValue);
+      const correctVersionBtn = correctVersion.parentNode.querySelector(`span`);
+      correctVersionBtn.classList.add(`correct-answer`);
 
-      let answers = [];
-
-      options.forEach((option) => {
-        let optionValue = option.dataset.type;
-        let versions = option.querySelectorAll(`input`);
-
+      // обработчик ответа
+      option.addEventListener(`click`, () => {
         versions.forEach((version) => {
           if (version.checked) {
-            let answerValue = version.value;
+            const answerValue = version.value;
             answers.push(optionValue === answerValue);
           }
         });
-      });
+        if (options.length === answers.length) {
+          const result = !answers.includes(false);
 
-      if (options.length === answers.length) {
-        const result = !answers.includes(false);
-        this.onAnswer(result);
-      }
+          this.onAnswer(result);
+        }
+      });
     });
   }
 }
+
+

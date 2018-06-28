@@ -14,62 +14,81 @@ const imagemin = require(`gulp-imagemin`);
 const rollup = require(`gulp-better-rollup`);
 const sourcemaps = require(`gulp-sourcemaps`);
 const mocha = require(`gulp-mocha`);
-const commonjs = require(`rollup-plugin-commonjs`);
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
+const uglify = require('gulp-uglify-es').default;
 
 gulp.task(`style`, () => {
   return gulp.src(`sass/style.scss`).
-    pipe(plumber()).
-    pipe(sass()).
-    pipe(postcss([
-      autoprefixer({
-        browsers: [
-          `last 1 version`,
-          `last 2 Chrome versions`,
-          `last 2 Firefox versions`,
-          `last 2 Opera versions`,
-          `last 2 Edge versions`
-        ]
-      }),
-      mqpacker({sort: true})
+  pipe(plumber()).
+  pipe(sass()).
+  pipe(postcss([
+    autoprefixer({
+      browsers: [
+      `last 1 version`,
+      `last 2 Chrome versions`,
+      `last 2 Firefox versions`,
+      `last 2 Opera versions`,
+      `last 2 Edge versions`
+      ]
+    }),
+    mqpacker({sort: true})
     ])).
-    pipe(gulp.dest(`build/css`)).
-    pipe(server.stream()).
-    pipe(minify()).
-    pipe(rename(`style.min.css`)).
-    pipe(gulp.dest(`build/css`));
+  pipe(gulp.dest(`build/css`)).
+  pipe(server.stream()).
+  pipe(minify()).
+  pipe(rename(`style.min.css`)).
+  pipe(gulp.dest(`build/css`));
 });
 
-gulp.task(`scripts`, () => {
-  return gulp.src(`js/main.js`)
-    .pipe(plumber())
-    .pipe(sourcemaps.init())
-    .pipe(rollup({}, `iife`))
-    .pipe(sourcemaps.write(``))
-    .pipe(rename(`output.js`))
-    .pipe(gulp.dest(`build/js`));
+gulp.task('scripts', function () {
+  return gulp.src('js/main.js')
+  .pipe(plumber())
+  .pipe(sourcemaps.init())
+  .pipe(rollup({
+    plugins: [
+    resolve({browser: true}),
+    commonjs(),
+    babel({
+      babelrc: false,
+      exclude: 'node_modules/**',
+      presets: [
+      ['env', {modules: false}]
+      ],
+      plugins: [
+      'external-helpers',
+      ]
+    })
+    ]
+  }, 'iife'))
+  .pipe(uglify())
+  .pipe(sourcemaps.write(''))
+  .pipe(rename(`output.js`))
+  .pipe(gulp.dest('build/js'));
 });
 
 gulp.task(`imagemin`, [`copy`], () => {
   return gulp.src(`build/img/**/*.{jpg,png,gif}`).
-    pipe(imagemin([
-      imagemin.optipng({optimizationLevel: 3}),
-      imagemin.jpegtran({progressive: true})
+  pipe(imagemin([
+    imagemin.optipng({optimizationLevel: 3}),
+    imagemin.jpegtran({progressive: true})
     ])).
-    pipe(gulp.dest(`build/img`));
+  pipe(gulp.dest(`build/img`));
 });
 
 gulp.task(`copy-html`, () => {
   return gulp.src(`*.{html,ico}`).
-    pipe(gulp.dest(`build`)).
-    pipe(server.stream());
+  pipe(gulp.dest(`build`)).
+  pipe(server.stream());
 });
 
 gulp.task(`copy`, [`copy-html`, `scripts`, `style`], () => {
   return gulp.src([
     `fonts/**/*.{woff,woff2}`,
     `img/*.*`
-  ], {base: `.`}).
-    pipe(gulp.dest(`build`));
+    ], {base: `.`}).
+  pipe(gulp.dest(`build`));
 });
 
 gulp.task(`clean`, () => {

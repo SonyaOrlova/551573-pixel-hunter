@@ -1,35 +1,41 @@
+import Loader from './utils/data-loader';
+import {showScreen, showModal, showScreenWithAnimation} from './utils/render-element.js';
+
+import GameModel from './game-model';
+
 import IntroScreen from './screens/screen-intro';
 import GreetingScreen from './screens/screen-greeting';
 import RulesScreen from './screens/screen-rules';
 import GameScreen from './screens/screen-game';
-import ModalConfirmScreen from './screens/screen-modal-confirm';
 import StatsScreen from './screens/screen-stats';
+import ModalConfirmScreen from './screens/screen-modal-confirm';
+import ErrorScreen from './screens/screen-error';
 
-import GameModel from './game-model';
-
-const mainPage = document.querySelector(`.central`);
-
-const showScreen = (screen) => {
-  mainPage.innerHTML = ``;
-  mainPage.appendChild(screen);
-};
-
-const coverScreen = (screen) => {
-  mainPage.appendChild(screen);
-};
+const debug = true; // дебаггер - правильные ответы в режиме отладки
 
 export default class Application {
-  static showIntro() {
-    const intro = new IntroScreen();
-    showScreen(intro.root);
-    intro.showNextScreen = () => this.showGreeting();
-    intro.init();
-
+  static async load() {
+    try {
+      const intro = new IntroScreen();
+      showScreen(intro.root);
+      this.gameData = await Loader.loadData();
+      Application.showGreeting(true);
+    } catch (error) {
+      Application.showError(error);
+    }
   }
 
-  static showGreeting() {
+  static start() {
+    Application.load().catch(Application.showError);
+  }
+
+  static showGreeting(withAnimation) {
     const greeting = new GreetingScreen();
-    showScreen(greeting.root);
+    if (withAnimation) {
+      showScreenWithAnimation(greeting.root);
+    } else {
+      showScreen(greeting.root);
+    }
     greeting.showNextScreen = () => this.showRules();
     greeting.init();
   }
@@ -38,30 +44,43 @@ export default class Application {
     const rules = new RulesScreen();
     showScreen(rules.root);
     rules.showGreetScreen = () => this.showGreeting();
-    rules.showNextScreen = () => this.showGame();
+    rules.showNextScreen = (playerName) => this.showGame(playerName);
     rules.init();
   }
 
-  static showStats(gameState) {
-    const stats = new StatsScreen(gameState);
-    showScreen(stats.root);
-    stats.showGreetScreen = () => this.showGreeting();
-    stats.init();
-  }
-
-  static showGame() {
-    const model = new GameModel();
-    const game = new GameScreen(model);
+  static showGame(playerName) {
+    const model = new GameModel(this.gameData, playerName);
+    const game = new GameScreen(model, debug);
     showScreen(game.root);
-    game.showNextScreen = () => this.showStats(model.gameState);
+    game.showNextScreen = () => this.showStats(model);
     game.showModal = () => this.showModalConfirm();
     game.startTimer();
   }
 
+  static async showStats(model) {
+    try {
+      await Loader.saveResults(model.gameState, model.playerName);
+
+      this.gameResults = await Loader.loadResults(model.playerName);
+
+      const stats = new StatsScreen(this.gameResults);
+      showScreen(stats.root);
+      stats.showGreetScreen = () => this.showGreeting();
+      stats.init();
+    } catch (error) {
+      Application.showError(error);
+    }
+  }
+
   static showModalConfirm() {
     const modalConfirm = new ModalConfirmScreen();
-    coverScreen(modalConfirm.root);
+    showModal(modalConfirm.root);
     modalConfirm.showGreetScreen = () => this.showGreeting();
     modalConfirm.init();
+  }
+
+  static showError() {
+    const error = new ErrorScreen();
+    showScreen(error.root);
   }
 }
