@@ -12,5 +12,6 @@ export const showModal = (element) => {
 export const showScreenWithAnimation = (element) => {
   mainPage.firstChild.classList.add(`hide-animation`);
   element.classList.add(`show-animation`);
-  setTimeout(() => showScreen(element), 1000);
+  mainPage.appendChild(element);
+  setTimeout(() => mainPage.removeChild(mainPage.firstChild), 1000);
 };

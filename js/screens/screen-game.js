@@ -26,11 +26,12 @@ export default class GameScreen {
     const questionType = question.category;
 
     const questionTypeMap = {
-      'classify': new QuestionViewClassify(question, this.model.gameState),
-      'choose': new QuestionViewChoose(question, this.model.gameState)
+      'classify': QuestionViewClassify,
+      'choose': QuestionViewChoose
     };
 
-    const questionView = questionTypeMap[questionType];
+    const QuestionViewClass = questionTypeMap[questionType];
+    const questionView = new QuestionViewClass(question, this.model.gameState);
 
     questionView.onAnswer = (result) => {
       this.onAnswer(result);
@@ -65,9 +66,9 @@ export default class GameScreen {
 
   changeGameLevel() {
     this.clearTimer();
-    this.model.nextLevel();
+    this.model.goToNextLevel();
 
-    if (this.model.isDead() || this.model.gameComplete()) {
+    if (this.model.isDead() || this.model.isGameComplete()) {
       this.showNextScreen();
     } else {
       this.updateScreen();

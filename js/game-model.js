@@ -29,11 +29,11 @@ export default class GameModel {
     return this._gameState.lives < 0;
   }
 
-  nextLevel() {
+  goToNextLevel() {
     return this._gameState.level++;
   }
 
-  gameComplete() {
+  isGameComplete() {
     return this._gameState.level === GameConcept.NUMBER_OF_GAMES;
   }
 
