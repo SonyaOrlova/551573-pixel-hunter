@@ -2,7 +2,8 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import resizeImage from '../utils/resize-image';
+import renderImages from '../utils/render-images';
+import renderDebug from '../utils/render-debug';
 
 export default class QuestionViewClassify extends AbstractView {
   constructor(question, gameState) {
@@ -36,60 +37,42 @@ export default class QuestionViewClassify extends AbstractView {
   }
 
   onAnswer() { }
-  onGameImageLoad(image) {
-
-    image.parentNode.style.display = `block`;
-
-    const frameSize = {
-      width: image.parentNode.clientWidth,
-      height: image.parentNode.clientHeight
-    };
-
-    const naturalSize = {
-      width: image.naturalWidth,
-      height: image.naturalHeight
-    };
-
-    const optimizedSize = resizeImage(frameSize, naturalSize);
-
-    image.width = optimizedSize.width;
-    image.height = optimizedSize.height;
+  onDebug(debug) {
+    return debug ? renderDebug(this.element) : null;
   }
 
   bind() {
 
-    const images = this.element.querySelectorAll(`.game__option > img`);
-    images.forEach((image) => {
-      image.parentNode.style.display = `none`;
+    renderImages(this.element); // отрисовка и ресайз
 
-      image.addEventListener(`load`, () => {
-        this.onGameImageLoad(image);
-      });
-    });
+    const answers = [];
 
-    const form = this.element.querySelector(`.game__content`);
     const options = this.element.querySelectorAll(`.game__option`);
+    options.forEach((option) => {
+      const optionValue = option.dataset.type;
+      const versions = option.querySelectorAll(`input`);
 
-    form.addEventListener(`change`, () => {
+      // дебаггер
+      const correctVersion = [...versions].find((version) => version.value === optionValue);
+      const correctVersionBtn = correctVersion.parentNode.querySelector(`span`);
+      correctVersionBtn.classList.add(`correct-answer`);
 
-      let answers = [];
-
-      options.forEach((option) => {
-        let optionValue = option.dataset.type;
-        let versions = option.querySelectorAll(`input`);
-
+      // обработчик ответа
+      option.addEventListener(`click`, () => {
         versions.forEach((version) => {
           if (version.checked) {
-            let answerValue = version.value;
+            const answerValue = version.value;
             answers.push(optionValue === answerValue);
           }
         });
-      });
+        if (options.length === answers.length) {
+          const result = !answers.includes(false);
 
-      if (options.length === answers.length) {
-        const result = !answers.includes(false);
-        this.onAnswer(result);
-      }
+          this.onAnswer(result);
+        }
+      });
     });
   }
 }
+
+

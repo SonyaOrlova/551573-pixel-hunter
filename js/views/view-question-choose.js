@@ -2,7 +2,8 @@ import AbstractView from './abstract-view';
 // templates
 import statsBarTemplate from '../templates/template-stats-bar';
 // logic
-import resizeImage from '../utils/resize-image';
+import renderImages from '../utils/render-images';
+import renderDebug from '../utils/render-debug';
 
 export default class QuestionViewChoose extends AbstractView {
   constructor(question, gameState) {
@@ -29,41 +30,22 @@ export default class QuestionViewChoose extends AbstractView {
   }
 
   onAnswer() { }
-  onGameImageLoad(image) {
-
-    image.parentNode.style.display = `block`;
-
-    const frameSize = {
-      width: image.parentNode.clientWidth,
-      height: image.parentNode.clientHeight
-    };
-
-    const naturalSize = {
-      width: image.naturalWidth,
-      height: image.naturalHeight
-    };
-
-    const optimizedSize = resizeImage(frameSize, naturalSize);
-
-    image.width = optimizedSize.width;
-    image.height = optimizedSize.height;
+  onDebug(debug) {
+    return debug ? renderDebug(this.element) : null;
   }
 
   bind() {
 
-    const images = this.element.querySelectorAll(`.game__option > img`);
-    images.forEach((image) => {
-      image.parentNode.style.display = `none`;
-      image.style.pointerEvents = `none`; // для firefox click
-
-      image.addEventListener(`load`, () => {
-        this.onGameImageLoad(image);
-      });
-    });
+    renderImages(this.element); // отрисовка и ресайз
 
     const options = this.element.querySelectorAll(`.game__option`);
-
     options.forEach((option) => {
+
+      // дебаггер
+      const correctVersion = [...options].find((version) => version.dataset.type === this.answerCorrect);
+      correctVersion.classList.add(`correct-answer`);
+
+      // обработчик ответа
       option.addEventListener(`click`, (evt) => {
         const target = evt.target;
         const result = target.dataset.type === this.answerCorrect;

@@ -2,7 +2,7 @@ import createDomElement from '../utils/create-element.js';
 
 export default class AbstractView {
   constructor() {
-    if (new.target === AbstractView) {
+    if (this.constructor === AbstractView) {
       throw new Error(`Can't instantiate AbstractView, only concrete one`);
     }
   } // запрещает создавать базовый класс, без наследования

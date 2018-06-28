@@ -8,7 +8,7 @@ export default class StatsView extends AbstractView {
   constructor(data) {
     super();
     this.data = data.reverse();
-    this.title = this.data[0].lives > 0 ? `Победа!` : `Проигрыш :(`;
+    this.title = this.data[0].lives >= 0 ? `Победа!` : `Проигрыш :(`;
   }
 
   get template() {
@@ -25,7 +25,7 @@ export default class StatsView extends AbstractView {
   gameStats(gameResult, gameIndex) {
     const score = getScore(gameResult.answers, gameResult.lives);
 
-    if (gameResult.lives > 0) {
+    if (gameResult.lives >= 0) {
       return `
       <table class="result__table">
       <tr>

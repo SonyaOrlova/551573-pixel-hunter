@@ -1,10 +1,11 @@
 parserOptions:
  sourceType: 'module'
+ "ecmaVersion": 2018
 
 env:
   es6: true
   browser: true
-  # commonjs: true
+  commonjs: true
   mocha: true
 
 extends: 'htmlacademy/es6'

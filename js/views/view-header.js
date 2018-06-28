@@ -44,5 +44,12 @@ export default class HeaderView extends AbstractView {
   bind() {
     const logo = this.element.querySelector(`.back`);
     logo.addEventListener(`click`, () => this.onLogoClick());
+
+    if (this.gameState) {
+      const timer = this.element.querySelector(`.game__timer`);
+      if (this.gameState.time <= 5) {
+        timer.classList.add(`game__timer-animation`);
+      }
+    }
   }
 }
