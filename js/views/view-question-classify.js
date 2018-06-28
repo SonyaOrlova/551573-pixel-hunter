@@ -67,6 +67,7 @@ export default class QuestionViewClassify extends AbstractView {
         });
         if (options.length === answers.length) {
           const result = !answers.includes(false);
+
           this.onAnswer(result);
         }
       });

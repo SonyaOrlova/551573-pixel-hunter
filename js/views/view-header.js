@@ -47,7 +47,7 @@ export default class HeaderView extends AbstractView {
 
     if (this.gameState) {
       const timer = this.element.querySelector(`.game__timer`);
-      if (this.gameState.time < 6) {
+      if (this.gameState.time <= 5) {
         timer.classList.add(`game__timer-animation`);
       }
     }

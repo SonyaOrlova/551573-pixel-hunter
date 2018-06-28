@@ -11,7 +11,7 @@ import StatsScreen from './screens/screen-stats';
 import ModalConfirmScreen from './screens/screen-modal-confirm';
 import ErrorScreen from './screens/screen-error';
 
-const debug = false; // дебаггер - правильные ответы в режиме отладки
+const debug = true; // дебаггер - правильные ответы в режиме отладки
 
 export default class Application {
   static async load() {
