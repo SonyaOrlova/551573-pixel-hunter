@@ -45,6 +45,8 @@ a {
 }
 
 .show-animation {
+  position: absolute;
+  z-index: 100;
   animation-name: show;
   animation-duration: 1s;
   animation-timing-function: linear;
