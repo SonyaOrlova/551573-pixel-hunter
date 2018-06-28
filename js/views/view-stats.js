@@ -61,7 +61,7 @@ export default class StatsView extends AbstractView {
       <td class="result__total">${score.slowResponse.points}</td>
       </tr>
       <tr>
-      <td colspan="5" class="result__total  result__total--final">${score.getTotalScore()}</td>
+      <td colspan="5" class="result__total  result__total--final">${score.totalScore}</td>
       </tr>
       </table>
       `;

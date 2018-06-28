@@ -11,6 +11,10 @@ export default (data) => {
       'tinder-like': `game__content  game__content--wide`,
       'two-of-two': `game__content`,
       'one-of-three': `game__content game__content--triple`
+    },
+    answerClass: {
+      'painting': `paint`,
+      'photo': `photo`
     }
   };
 
@@ -25,16 +29,12 @@ export default (data) => {
 
       inner: dataMapper.inner[it.type],
 
-      get answers() {
-        return [...it.answers].map((answer) => {
-          return {
-            get class() {
-              return answer.type === `painting` ? `paint` : answer.type;
-            },
-            src: answer.image.url
-          };
-        });
-      }
+      answers: [...it.answers].map((answer) => {
+        return {
+          class: dataMapper.answerClass[answer.type],
+          src: answer.image.url
+        };
+      })
     };
 
     adapted.push(question);
