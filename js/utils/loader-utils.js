@@ -38,6 +38,6 @@ export const loadImage = (img) => {
     // image.width = imageOptimizedSize.width;
     // image.height = imageOptimizedSize.height;
     image.src = img.url;
-  })
+  });
 };
 

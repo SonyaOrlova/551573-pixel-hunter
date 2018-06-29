@@ -35,6 +35,6 @@ export default class Loader {
       method: `POST`
     };
     const response = await fetch(`${SERVER_URL}/stats/${APP_ID}-${name}`, requestSettings);
-    return checkStatus(response)
+    return checkStatus(response);
   }
 }
