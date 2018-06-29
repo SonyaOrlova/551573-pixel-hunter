@@ -16,13 +16,13 @@ export default class StatsView extends AbstractView {
     <div class="result">
     <h1>${this.title}</h1>
     ${[...this.data].map((gameResult, gameIndex) =>
-    this.gameStats(gameResult, gameIndex + 1)
+    StatsView.gameStats(gameResult, gameIndex + 1)
   ).join(``)}
     </div>
     `;
   }
 
-  gameStats(gameResult, gameIndex) {
+  static gameStats(gameResult, gameIndex) {
     const score = getScore(gameResult.answers, gameResult.lives);
 
     if (gameResult.lives >= 0) {
@@ -65,19 +65,18 @@ export default class StatsView extends AbstractView {
       </tr>
       </table>
       `;
-    } else {
-      return `
-      <table class="result__table">
-      <tr>
-      <td class="result__number">${gameIndex}.</td>
-      <td>
-      ${statsBarTemplate(gameResult.answers)}
-      </td>
-      <td class="result__total"></td>
-      <td class="result__total  result__total--final">fail</td>
-      </tr>
-      </table>
-      `;
     }
+    return `
+    <table class="result__table">
+    <tr>
+    <td class="result__number">${gameIndex}.</td>
+    <td>
+    ${statsBarTemplate(gameResult.answers)}
+    </td>
+    <td class="result__total"></td>
+    <td class="result__total  result__total--final">fail</td>
+    </tr>
+    </table>
+      `;
   }
 }

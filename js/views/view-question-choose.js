@@ -35,11 +35,12 @@ export default class QuestionViewChoose extends AbstractView {
   }
 
   bind() {
-
     renderImages(this.element); // отрисовка и ресайз
 
     const options = this.element.querySelectorAll(`.game__option`);
     options.forEach((option) => {
+      const image = option.querySelector(`.game__option > img`);
+      image.style.pointerEvents = `none`; // для firefox click
 
       // дебаггер
       const correctVersion = [...options].find((version) => version.dataset.type === this.answerCorrect);

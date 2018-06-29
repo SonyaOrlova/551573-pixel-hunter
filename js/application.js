@@ -1,4 +1,4 @@
-import Loader from './utils/data-loader';
+import Loader from './utils/loader';
 import {showScreen, showModal, showScreenWithAnimation} from './utils/render-element.js';
 
 import GameModel from './game-model';
@@ -19,6 +19,7 @@ export default class Application {
       const intro = new IntroScreen();
       showScreen(intro.root);
       this.gameData = await Loader.loadData();
+      // await Loader.preloadImages(this.gameData);
       Application.showGreeting(true);
     } catch (error) {
       Application.showError(error);

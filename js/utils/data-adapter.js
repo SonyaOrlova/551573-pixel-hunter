@@ -19,7 +19,7 @@ export default (data) => {
   };
 
   data.forEach((it) => {
-    let question = {
+    const question = {
 
       type: it.type,
 

@@ -7,6 +7,14 @@ export default class GameModel {
     this.restartGame();
   }
 
+  get gameState() {
+    return this._gameState;
+  }
+
+  get gameOrder() {
+    return this._gameOrder;
+  }
+
   restartGame() {
     this._gameState = {
       level: 0,
@@ -43,14 +51,6 @@ export default class GameModel {
 
   renewTimer() {
     this._gameState.time = TimeLimits.INITIAL_TIMER;
-  }
-
-  get gameState() {
-    return this._gameState;
-  }
-
-  get gameOrder() {
-    return this._gameOrder;
   }
 }
 

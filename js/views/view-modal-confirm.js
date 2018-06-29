@@ -8,15 +8,15 @@ export default class ModalConfirmView extends AbstractView {
   get template() {
     return `
     <section class="modal-confirm modal-confirm__wrap">
-      <form class="modal-confirm__inner">
-        <button class="modal-confirm__close" type="button">Закрыть</button>
-        <h2 class="modal-confirm__title">Подтверждение</h2>
-        <p class="modal-confirm__text">Вы уверены что хотите начать игру заново?</p>
-        <div class="modal-confirm__btn-wrap">
-          <button class="modal-confirm__btn" data-select="ok">Ок</button>
-          <button class="modal-confirm__btn" data-select="cancel">Отмена</button>
-        </div>
-      </form>
+    <form class="modal-confirm__inner">
+    <button class="modal-confirm__close" type="button">Закрыть</button>
+    <h2 class="modal-confirm__title">Подтверждение</h2>
+    <p class="modal-confirm__text">Вы уверены что хотите начать игру заново?</p>
+    <div class="modal-confirm__btn-wrap">
+    <button class="modal-confirm__btn" data-select="ok">Ок</button>
+    <button class="modal-confirm__btn" data-select="cancel">Отмена</button>
+    </div>
+    </form>
     </section>
     `;
   }
@@ -46,9 +46,6 @@ export default class ModalConfirmView extends AbstractView {
     btnCancel.addEventListener(`click`, cancelHandler);
     btnClose.addEventListener(`click`, cancelHandler);
 
-    btnOk.addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      this.onConfirm();
-    });
+    btnOk.addEventListener(`click`, () => this.onConfirm());
   }
 }

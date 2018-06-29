@@ -41,7 +41,6 @@
     "node": "8"
   },
   "dependencies": {
-    "babel-polyfill": "6.26.0",
-    "devtools-detect": "^2.2.0"
+    "babel-polyfill": "6.26.0"
   }
 }
