@@ -1,5 +1,5 @@
 import adaptServerData from './data-adapter';
-import {checkStatus, getImages, loadImage} from './loader-utils';
+import {checkStatus, loadImage} from './loader-utils';
 
 const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
 
@@ -15,8 +15,38 @@ export default class Loader {
   }
 
   static preloadImages(data) {
-    const images = getImages(data);
-    const promises = [...images].map((image) => loadImage(image));
+    const promises = [];
+
+    data.forEach((question, qIndex) => {
+      const answers = question.answers;
+
+      answers.forEach((answer, aIndex) => {
+        promises.push(loadImage(answer.image.url)
+      // // при успешной загрузке:
+      // .then((image) => {
+      //   // ресайз изображения
+      //   const imageFrameSize = {
+      //     width: answer.image.width,
+      //     height: answer.image.height
+      //   };
+      //   const imageNaturalSize = {
+      //     width: image.naturalWidth,
+      //     height: image.naturalHeight
+      //   };
+
+      //   const imageOptimizedSize = resizeImage(imageFrameSize, imageNaturalSize);
+
+      //   image.width = imageOptimizedSize.width;
+      //   image.height = imageOptimizedSize.height;
+
+      //   // data-атрибут с порядковым номером вопроса и вариантом ответа
+      //   image.dataset.question = qIndex;
+      //   image.dataset.answer = aIndex;
+      // })
+      // .catch((error) => onError(error))
+        );
+      });
+    });
     return Promise.all(promises);
   }
 

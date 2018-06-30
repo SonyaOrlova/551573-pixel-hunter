@@ -14,7 +14,7 @@ export default class ModalConfirmScreen {
     this.content.onConfirm = this.showGreetScreen;
 
     this.content.onCancel = (modalWrapper) => {
-      modalWrapper.classList.add(`modal-confirm__wrap--hidden`);
+      this.root.remove();
     };
   }
 }

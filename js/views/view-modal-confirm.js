@@ -46,6 +46,10 @@ export default class ModalConfirmView extends AbstractView {
     btnCancel.addEventListener(`click`, cancelHandler);
     btnClose.addEventListener(`click`, cancelHandler);
 
-    btnOk.addEventListener(`click`, () => this.onConfirm());
+    btnOk.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+      this.onConfirm()
+    });
   }
 }

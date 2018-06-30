@@ -1,6 +1,6 @@
 import {GameConcept} from '../utils/constants';
 
-const statsBarTemplate = (answers) =>
+export default (answers) =>
   `
     <div class="stats">
       <ul class="stats">
@@ -10,6 +10,4 @@ const statsBarTemplate = (answers) =>
       </ul>
     </div>
   `;
-
-export default statsBarTemplate;
 

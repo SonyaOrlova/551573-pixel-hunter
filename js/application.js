@@ -19,7 +19,7 @@ export default class Application {
       const intro = new IntroScreen();
       showScreen(intro.root);
       this.gameData = await Loader.loadData();
-      // await Loader.preloadImages(this.gameData);
+      this.gameImages = await Loader.preloadImages(this.gameData);
       Application.showGreeting(true);
     } catch (error) {
       Application.showError(error);
@@ -28,6 +28,7 @@ export default class Application {
 
   static start() {
     Application.load().catch(Application.showError);
+    console.log(this.gameImages)
   }
 
   static showGreeting(withAnimation) {
@@ -76,7 +77,10 @@ export default class Application {
   static showModalConfirm() {
     const modalConfirm = new ModalConfirmScreen();
     showModal(modalConfirm.root);
-    modalConfirm.showGreetScreen = () => this.showGreeting();
+    modalConfirm.showGreetScreen = () => {
+      this.showGreeting();
+      modalConfirm.root.remove();
+    };
     modalConfirm.init();
   }
 
