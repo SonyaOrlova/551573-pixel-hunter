@@ -1,10 +1,19 @@
 import {GameConcept, TimeLimits} from './utils/constants';
 
 export default class GameModel {
-  constructor(gameData, playerName) {
+  constructor(gameData, gamePreloadedImages, playerName) {
     this.gameData = gameData;
+    this.gamePreloadedImages = gamePreloadedImages;
     this.playerName = playerName;
     this.restartGame();
+  }
+
+  get gameState() {
+    return this._gameState;
+  }
+
+  get gameOrder() {
+    return this._gameOrder;
   }
 
   restartGame() {
@@ -43,14 +52,6 @@ export default class GameModel {
 
   renewTimer() {
     this._gameState.time = TimeLimits.INITIAL_TIMER;
-  }
-
-  get gameState() {
-    return this._gameState;
-  }
-
-  get gameOrder() {
-    return this._gameOrder;
   }
 }
 

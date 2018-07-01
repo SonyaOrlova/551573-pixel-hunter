@@ -19,20 +19,17 @@ export default (data) => {
   };
 
   data.forEach((it) => {
-    let question = {
-
+    const question = {
       type: it.type,
-
       description: it.question,
-
       category: dataMapper.category[it.type],
-
       inner: dataMapper.inner[it.type],
-
       answers: [...it.answers].map((answer) => {
         return {
           class: dataMapper.answerClass[answer.type],
-          src: answer.image.url
+          src: answer.image.url,
+          width: answer.image.width,
+          height: answer.image.height
         };
       })
     };

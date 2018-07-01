@@ -37,10 +37,9 @@ export default class ModalConfirmView extends AbstractView {
       }
     });
 
-    const modalWrapper = this.element.querySelector(`.modal-confirm__wrap`);
     const cancelHandler = (evt) => {
       evt.preventDefault();
-      this.onCancel(modalWrapper);
+      this.onCancel();
     };
 
     btnCancel.addEventListener(`click`, cancelHandler);
@@ -48,6 +47,7 @@ export default class ModalConfirmView extends AbstractView {
 
     btnOk.addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      evt.stopPropagation();
       this.onConfirm();
     });
   }
