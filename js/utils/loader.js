@@ -56,8 +56,13 @@ export default class Loader {
   }
 
   static async saveResults(data, name = DEFAULT_NAME) {
+    const result = {
+      name,
+      answers: data.answers,
+      lives: data.lives
+    };
     const requestSettings = {
-      body: JSON.stringify(data),
+      body: JSON.stringify(result),
       headers: {
         'Content-Type': `application/json`
       },
