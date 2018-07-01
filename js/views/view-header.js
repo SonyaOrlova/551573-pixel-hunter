@@ -6,7 +6,7 @@ export default class HeaderView extends AbstractView {
     this.gameState = gameState;
   }
 
-    get template() {
+  get template() {
     if (this.gameState) {
       return `
       <header class="header">
@@ -23,9 +23,9 @@ export default class HeaderView extends AbstractView {
       </header>`;
     }
     return `
-    <header class="header">
-      ${HeaderView.logo()}
-    </header>`;
+  <header class="header">
+    ${HeaderView.logo()}
+  </header>`;
   }
 
   static logo() {

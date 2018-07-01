@@ -1,55 +1,49 @@
-import AbstractView from './abstract-view';
-// templates
+import AbstractViewQuestion from './abstract-view-question';
 import statsBarTemplate from '../templates/template-stats-bar';
-// logic
-import renderImages from '../utils/render-images';
-import renderDebug from '../utils/render-debug';
 
-export default class QuestionViewChoose extends AbstractView {
-  constructor(question, gameState) {
+export default class QuestionViewChoose extends AbstractViewQuestion {
+  constructor(question, gamePreloadedImages, gameState) {
     super();
     this.question = question;
+    this.gamePreloadedImages = gamePreloadedImages;
     this.gameState = gameState;
-
+    this.preloadedImagesUrls = [];
     this.answerCorrect = this.question.description === `Найдите рисунок среди изображений` ? `paint` : `photo`;
   }
 
   get template() {
     return `
     <div class="game">
-    <p class="game__task">${this.question.description}</p>
-    <form class="${this.question.inner}">
-    ${[...this.question.answers].map((answer) => `
-      <div class="game__option" data-type="${answer.class}">
-      <img src="${answer.src}" alt="Option 1">
-      </div>`).join(``)}
-    </form>
-    ${statsBarTemplate(this.gameState.answers)}
+      <p class="game__task">${this.question.description}</p>
+      <form class="${this.question.inner}">
+      ${[...this.question.answers].map((answer) => `
+        <div class="game__option" data-type="${answer.class}">
+        </div>`).join(``)}
+      </form>
+      ${statsBarTemplate(this.gameState.answers)}
     </div>
     `;
   }
 
-  onAnswer() { }
-  onDebug(debug) {
-    return debug ? renderDebug(this.element) : null;
-  }
-
   bind() {
-    renderImages(this.element); // отрисовка и ресайз
-
     const options = this.element.querySelectorAll(`.game__option`);
-    options.forEach((option) => {
-      const image = option.querySelector(`.game__option > img`);
-      image.style.pointerEvents = `none`; // для firefox click
+    options.forEach((option, optionIndex) => {
 
-      // дебаггер
+      // вставка изображения
+      this.insertPreloadedImage(option, optionIndex);
+
+      // firefox div click
+      const image = option.querySelector(`.game__option > img`);
+      image.style.pointerEvents = `none`;
+
+      // метка правильного ответа для дебаггера
       const correctVersion = [...options].find((version) => version.dataset.type === this.answerCorrect);
       correctVersion.classList.add(`correct-answer`);
 
       // обработчик ответа
       option.addEventListener(`click`, (evt) => {
         const target = evt.target;
-        const result = target.dataset.type === this.answerCorrect;
+        const result = (target === correctVersion);
 
         this.onAnswer(result);
       });

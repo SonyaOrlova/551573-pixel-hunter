@@ -31,7 +31,7 @@ export default class GameScreen {
     };
 
     const QuestionViewClass = questionTypeMap[questionType];
-    const questionView = new QuestionViewClass(question, this.model.gameState);
+    const questionView = new QuestionViewClass(question, this.model.gamePreloadedImages, this.model.gameState);
 
     questionView.onAnswer = (result) => {
       this.onAnswer(result);

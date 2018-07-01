@@ -62,10 +62,10 @@ gulp.task('scripts', function () {
     })
     ]
   }, 'iife'))
-  // .pipe(uglify())
-  .pipe(sourcemaps.write(''))
+  .pipe(uglify())
   .pipe(rename(`output.js`))
-  .pipe(gulp.dest('build/js'));
+  .pipe(sourcemaps.write(''))
+  .pipe(gulp.dest('build/js'))
 });
 
 gulp.task(`imagemin`, [`copy`], () => {

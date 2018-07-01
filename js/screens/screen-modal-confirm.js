@@ -13,8 +13,6 @@ export default class ModalConfirmScreen {
   init() {
     this.content.onConfirm = this.showGreetScreen;
 
-    this.content.onCancel = (modalWrapper) => {
-      this.root.remove();
-    };
+    this.content.onCancel = () => this.root.remove();
   }
 }

@@ -1,4 +1,5 @@
 import adaptServerData from './data-adapter';
+import resizeImage from './resize-image';
 import {checkStatus, loadImage} from './loader-utils';
 
 const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
@@ -17,33 +18,31 @@ export default class Loader {
   static preloadImages(data) {
     const promises = [];
 
-    data.forEach((question, qIndex) => {
+    data.forEach((question) => {
       const answers = question.answers;
 
-      answers.forEach((answer, aIndex) => {
-        promises.push(loadImage(answer.image.url)
-      // // при успешной загрузке:
-      // .then((image) => {
-      //   // ресайз изображения
-      //   const imageFrameSize = {
-      //     width: answer.image.width,
-      //     height: answer.image.height
-      //   };
-      //   const imageNaturalSize = {
-      //     width: image.naturalWidth,
-      //     height: image.naturalHeight
-      //   };
+      answers.forEach((answer) => {
+        promises.push(loadImage(answer.src)
+        // при успешной загрузке:
+        .then((image) => {
+          // ресайз изображения
+          const imageFrameSize = {
+            width: answer.width,
+            height: answer.height
+          };
+          const imageNaturalSize = {
+            width: image.naturalWidth,
+            height: image.naturalHeight
+          };
 
-      //   const imageOptimizedSize = resizeImage(imageFrameSize, imageNaturalSize);
+          const imageOptimizedSize = resizeImage(imageFrameSize, imageNaturalSize);
 
-      //   image.width = imageOptimizedSize.width;
-      //   image.height = imageOptimizedSize.height;
+          image.width = imageOptimizedSize.width;
+          image.height = imageOptimizedSize.height;
 
-      //   // data-атрибут с порядковым номером вопроса и вариантом ответа
-      //   image.dataset.question = qIndex;
-      //   image.dataset.answer = aIndex;
-      // })
-      // .catch((error) => onError(error))
+          return image;
+        })
+        .catch((error) => `Ошибка ${error.message}`)
         );
       });
     });

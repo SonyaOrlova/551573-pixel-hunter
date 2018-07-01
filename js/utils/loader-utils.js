@@ -1,5 +1,3 @@
-// import resizeImage from './resize-image';
-
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -10,9 +8,8 @@ export const checkStatus = (response) => {
 export const loadImage = (url) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
-    image.onload = () => resolve(url);
+    image.onload = () => resolve(image);
     image.onerror = () => reject(`Не удалось загрузить изображение: ${url}`);
     image.src = url;
   });
 };
-
