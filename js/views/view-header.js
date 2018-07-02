@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view';
+import {TimeLimits} from '../utils/constants';
 
 export default class HeaderView extends AbstractView {
   constructor(gameState) {
@@ -46,7 +47,7 @@ export default class HeaderView extends AbstractView {
 
     if (this.gameState) {
       const timer = this.element.querySelector(`.game__timer`);
-      if (this.gameState.time <= 5) {
+      if (this.gameState.time <= TimeLimits.ALARM) {
         timer.classList.add(`game__timer-animation`);
       }
     }

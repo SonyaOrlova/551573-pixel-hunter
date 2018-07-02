@@ -6,7 +6,8 @@ export const GameConcept = {
 export const TimeLimits = {
   SLOW_RESPONSE_TIMELIMIT: 20,
   QUICK_RESPONSE_TIMELIMIT: 10,
-  INITIAL_TIMER: 30
+  INITIAL_TIMER: 30,
+  ALARM: 5
 };
 
 export const ScoringRules = {
