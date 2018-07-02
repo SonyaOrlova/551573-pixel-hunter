@@ -39,7 +39,7 @@ export default class Application {
   }
 
   static start() {
-    Application.load().catch(Application.showError);
+    Application.load();
   }
 
   static showGreeting(withAnimation) {
@@ -95,6 +95,6 @@ export default class Application {
 
   static showError() {
     const error = new ErrorScreen();
-    showScreen(error.root);
+    showModal(error.root);
   }
 }
